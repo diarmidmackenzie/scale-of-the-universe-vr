@@ -14,6 +14,9 @@ AFRAME.registerComponent('scalable', {
     // vector used for calculating re-centering
     this.vectorFromCenter = new THREE.Vector3();
 
+    // vector used for calculating object scales
+    this.checkScale = new THREE.Vector3();
+
     // listeners for scaling events (key presses)
     this.listeners = {
       'scaleOut' : this.scaleOut.bind(this),
@@ -29,6 +32,7 @@ AFRAME.registerComponent('scalable', {
 
   update: function () {
     this.center = this.data.center;
+    this.adjustChildrenVisibility();
   },
 
   // listener for scale out event
@@ -41,6 +45,7 @@ AFRAME.registerComponent('scalable', {
     this.vectorFromCenter.multiplyScalar(this.scaleSpeed);
     this.el.object3D.position.addVectors(this.center.object3D.position,
                                          this.vectorFromCenter);
+    this.adjustChildrenVisibility();
   },
 
   // listener for scale in event
@@ -53,6 +58,32 @@ AFRAME.registerComponent('scalable', {
     this.vectorFromCenter.divideScalar(this.scaleSpeed);
     this.el.object3D.position.addVectors(this.center.object3D.position,
                                          this.vectorFromCenter);
+    this.adjustChildrenVisibility();
+  },
+
+  // Once object world scale is below 1 in 1M, we cull it.
+  // could be smarter and actually use the bounding sphere of the object
+  // but not trivisl to find it, and don't want to repeat this every time
+  // we zoom in / out.
+  // rough logic would be:
+  // from the Object3D, traverse children until we find one of type = 'Mesh'
+  // Whenever we find one of type 'Mesh', get the geometry, and the bounding
+  // sphere from that.
+  // Iterate through all such objects and find the largest radius.
+  // Use this to compute whether or not to display the element.
+  adjustChildrenVisibility: function () {
+
+    for (child of this.el.children) {
+      child.object3D.getWorldScale(this.checkScale)
+
+      if (this.checkScale.x < 0.000001) {
+        child.object3D.visible = false;
+      }
+      else
+      {
+        child.object3D.visible = true;
+      }
+    }
   },
 
   // if we are in a scaling in or out state, execute the scaling.
