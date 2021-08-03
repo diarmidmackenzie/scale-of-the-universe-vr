@@ -1,0 +1,11 @@
+Model Information:
+* title:	Artifex Ant
+* source:	https://sketchfab.com/3d-models/artifex-ant-2b3d4906f9ec4b7c9945e4f710262253
+* author:	N1K (https://sketchfab.com/n1k77)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Artifex Ant" (https://sketchfab.com/3d-models/artifex-ant-2b3d4906f9ec4b7c9945e4f710262253) by N1K (https://sketchfab.com/n1k77) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
