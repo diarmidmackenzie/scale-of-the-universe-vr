@@ -86,9 +86,10 @@ AFRAME.registerComponent('scalable', {
     }
   },
 
-  // if we are in a scaling in or out state, execute the scaling.
+
   tick: function() {
 
+    // if we are in a scaling in or out state, execute the scaling.
     if (this.el.is("scaling-in")) {
       this.scaleIn();
     }
@@ -244,3 +245,148 @@ function formatNumber(number) {
   number = Number(number.toPrecision(2))
   return number.toString();
 }
+
+// Entity is moved based on setting/clearing states
+// x/y/z-plus/minus for position
+// x/y/z-rot-plus/minus for rotation
+// Movement speed is configurable in m/s
+// Rotation speed is configurable in degrees/s
+
+AFRAME.registerComponent('state-driven-movement', {
+  schema: {
+     moverate:   {type: 'number', default: '2'},
+     rotaterate: {type: 'number', default: '45'},
+  },
+
+  update: function() {
+    // internally store move rate as movement per msec
+    this.moveRate = this.data.moverate / 1000;
+
+    // and rotation rate as radians per msec
+    this.rotateRate = this.data.rotaterate * Math.PI / 180000;
+  },
+
+  tick: function(time, timeDelta) {
+
+   // Update position and rotation based on states set.
+    if (this.el.is("x-plus")) {
+      this.el.object3D.position.x += this.moveRate * timeDelta
+    }
+    else if (this.el.is("x-minus")) {
+      this.el.object3D.position.x -= this.moveRate * timeDelta
+    }
+
+    if (this.el.is("y-plus")) {
+      this.el.object3D.position.y += this.moveRate * timeDelta
+    }
+    else if (this.el.is("y-minus")) {
+      this.el.object3D.position.y -= this.moveRate * timeDelta
+    }
+
+    if (this.el.is("z-plus")) {
+      this.el.object3D.position.z += this.moveRate * timeDelta
+    }
+    else if (this.el.is("z-minus")) {
+      this.el.object3D.position.z -= this.moveRate * timeDelta
+    }
+
+    if (this.el.is("x-rot-plus")) {
+      this.el.object3D.rotation.x += this.rotateRate * timeDelta
+    }
+    else if (this.el.is("x-rot-minus")) {
+      this.el.object3D.rotation.x -= this.rotateRate * timeDelta
+    }
+
+    if (this.el.is("y-rot-plus")) {
+      this.el.object3D.rotation.y += this.rotateRate * timeDelta
+    }
+    else if (this.el.is("y-rot-minus")) {
+      this.el.object3D.rotation.y -= this.rotateRate * timeDelta
+    }
+
+    if (this.el.is("z-rot-plus")) {
+      this.el.object3D.rotation.z += this.rotateRate * timeDelta
+    }
+    else if (this.el.is("z-rot-minus")) {
+      this.el.object3D.rotation.z -= this.rotateRate * timeDelta
+    }
+  }
+});
+
+// Set states based on thumbstick positions.
+// controller: selector for the controller with the thumbstick
+// bindings: stats to set for each of up/down/left/right.
+// sensitivity: 0 to 1- how far off center thumbstick must be to count as movement.
+// Note the default settings, which give standard left thumbstick movement
+// don't actually work very well because the X & Z directions are fixed
+// in space.  Could make this work using a nested set of "gimbals", but you get
+// a better movement experience by allowing for the position of the controller
+// itself, using thumbstick-object-control.
+AFRAME.registerComponent('thumbstick-states', {
+  schema: {
+     controller:   {type: 'selector', default: "#lhand"},
+     bindings:     {type: 'array', default: "z-minus,z-plus,x-minus,x-plus"},
+     sensitivity:  {type: 'number', default: 0.5}
+  },
+
+  multiple: true,
+
+  init: function() {
+    this.controller = this.data.controller;
+
+    this.listeners = {
+      thumbstickMoved: this.thumbstickMoved.bind(this),
+    }
+  },
+
+  update: function() {
+
+    this.yplus = this.data.bindings[0]
+    this.yminus = this.data.bindings[1]
+    this.xplus = this.data.bindings[2]
+    this.xminus = this.data.bindings[3]
+
+    this.controller.addEventListener('thumbstickmoved',
+                                     this.listeners.thumbstickMoved,
+                                     false);
+
+  },
+
+  thumbstickMoved: function(event) {
+
+    const x = event.detail.x
+    const y = event.detail.y
+
+    if (Math.abs(x) > this.data.sensitivity) {
+      if (x > 0) {
+        this.el.addState(this.xplus)
+        this.el.removeState(this.xminus)
+      }
+      else {
+        this.el.addState(this.xminus)
+        this.el.removeState(this.xplus)
+      }
+    }
+    else
+    {
+      this.el.removeState(this.xplus)
+      this.el.removeState(this.xminus)
+    }
+
+    if (Math.abs(y) > this.data.sensitivity) {
+      if (y > 0) {
+        this.el.addState(this.yplus)
+        this.el.removeState(this.yminus)
+      }
+      else {
+        this.el.addState(this.yminus)
+        this.el.removeState(this.yplus)
+      }
+    }
+    else
+    {
+      this.el.removeState(this.yplus)
+      this.el.removeState(this.yminus)
+    }
+  }
+});

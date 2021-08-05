@@ -4,6 +4,7 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/key-bindings@v0.3-alpha/key-bindings.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/6dof-object-control@v0.5-alpha/src/thumbstick-object-control.min.js"></script>
     <script src="./scale.js"></script>
   </head>
   <body>
@@ -47,7 +48,21 @@
         </a-asset-item>
       </a-assets>
 
-      <a-entity id="rig" movement-controls>
+      <a-entity id="rig" movement-controls="controls:keyboard,touch"
+                         thumbstick-object-control="movestick:#lhand;
+                                                    rotatestick:none;
+                                                    moverepeattime:1;
+                                                    axes:XZ;
+                                                    posunit:0.05"
+                         state-driven-movement
+                         key-bindings="bindings:ShiftLeft=$y-plus,
+                                                ControlLeft=$y-minus,
+                                                KeyQ=$y-rot-plus,
+                                                KeyE=$y-rot-minus"
+                         thumbstick-states__right="controller:#rhand;
+                                                  bindings:y-minus,y-plus,y-rot-minus,y-rot-plus">
+
+
         <a-entity id="camera" camera position="0 1.6 0" look-controls>
         </a-entity>
         <a-entity id="scale" position="0 1 -0.8" scale-ruler="target:#scale-container">
