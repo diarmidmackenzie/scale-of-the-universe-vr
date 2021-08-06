@@ -475,9 +475,7 @@ AFRAME.registerComponent('clickable-object', {
 
   schema: {
     id: {type: 'selector'},
-    infopanel: {type: 'selector', default: '#info-panel'},
-    title: {type: 'selector', default: '#upper-text'},
-    detail: {type: 'selector', default: '#lower-text'}
+    infopanel: {type: 'selector', default: '#info-panel'}    
   },
 
   init: function () {
