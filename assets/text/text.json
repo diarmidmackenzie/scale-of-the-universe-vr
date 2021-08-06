@@ -1,0 +1,14 @@
+{
+  "trex": {
+    "title": "Tyrannosaurus Rex",
+    "detail": "Tyrannosaurus Rex was the largest land predator ever to walk the earth.  Fully grown adults could measure 12-13m in length, and weighed between 9 and 14 tons."
+  },
+  "eiffel": {
+    "title": "The Eiffel Tower",
+    "detail": "The Eiffel Tower was built in Paris, France in 1889 to celebrate the 100th anniversary of the French Revolution.  It is 300 m tall."
+  },
+  "info-panel": {
+    "title": "Welcome to The Scale of the Universe VR",
+    "detail": "Left grip will zoom in.  Right grip to zoom out.\n\nPoint and click at an object to learn more about it.\n\nLeft thumbstick to move forwards, backwards left and right.\n\nRight thumbstick to turn left or right, and move up or down."
+  }
+}

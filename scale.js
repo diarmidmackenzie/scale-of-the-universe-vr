@@ -135,6 +135,7 @@ AFRAME.registerComponent('scale-ruler', {
     this.ruler.setAttribute('width', '1')
     this.ruler.setAttribute('position', '0 0 0')
     this.ruler.setAttribute('color', 'grey')
+    this.ruler.setAttribute('metalness', '0.8')
     this.el.appendChild(this.ruler);
 
     // 3. Writing on the ruler.
@@ -402,102 +403,223 @@ AFRAME.registerComponent('thumbstick-states', {
   }
 });
 
-AFRAME.registerComponent('caption', {
+AFRAME.registerComponent('info-panel', {
 
   schema : {
     object: {type: 'selector'},
-    shortheight: {type: 'number', default: 0.5},
-    tallheight: {type: 'number', default: 2}
+    textbank: {type: 'selector', default: '#text'},
   },
 
   init : function () {
-    this.title = "Tyrannosaurus Rex"
-    this.detail = "Tyrannosaurus Rex was the largest land predator ever to walk the earth.  Fully grown adults could measure 12-13m in length, and weighed between 9 and 14 tons."
+    this.title = "Welcome to The Scale of the Universe VR"
+    this.detail = `Left grip will zoom in.  Right grip to zoom out.\n
+                   Point and click at an object to learn more about it.\n
+                   Left thumbstick to move forwards, backwards left and right.\n
+                   Right thumbstick to turn left or right, and move up or down.`
     this.hOffsetExpanded = (this.data.tallheight - this.data.shortheight) / 2;
-    this.expanded = false;
+    this.expanded = true;
+    console.log("JSON: " + this.data.textbank.data);
 
-    this.plane = document.createElement('a-plane');
-    this.plane.setAttribute('color', 'grey')
-    this.plane.setAttribute('width', 2)
-    this.plane.setAttribute('height', 0.5)
-    this.plane.setAttribute('rotate-to-face-player', "")
-    this.plane.setAttribute('class', "caption")
-    this.plane.setAttribute('animation__scale', "property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter");
-    this.plane.setAttribute('animation__scale_reverse', "property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave");
-    this.el.appendChild(this.plane);
+    this.textbank = JSON.parse(this.data.textbank.data);
 
-    this.text = document.createElement('a-text');
-    this.text.setAttribute('value', this.title)
-    this.text.setAttribute('color', 'black')
-    this.text.setAttribute('align', 'center')
-    this.text.setAttribute('width', 2)
-    this.text.setAttribute('wrap-count', 20)
+    this.upper = document.createElement('a-entity');
+    this.upper.setAttribute('framed-block', "height:0.1;width:1;depth:0.02;frame:0.004;framecolor:#fff;facecolor:#000")
+    this.upper.setAttribute('position', "0 0.25 0")
+    this.upper.setAttribute('class','clickable-object');
 
-    this.plane.appendChild(this.text);
+    this.el.appendChild(this.upper);
+    this.upperText = document.createElement('a-text');
+    this.upperText.setAttribute('id', "upper-text")
+    this.upperText.setAttribute('position', "0 0 0.01")
+    this.upperText.setAttribute('value', this.textbank['info-panel'].title)
+    this.upperText.setAttribute('color', 'white')
+    this.upperText.setAttribute('align', 'center')
+    this.upperText.setAttribute('width', 1)
+    this.upperText.setAttribute('wrap-count', 40)
+    this.upper.appendChild(this.upperText);
+
+    this.lower = document.createElement('a-entity');
+    this.lower.setAttribute('framed-block', "height:0.4;width:1;depth:0.02;frame:0.004;framecolor:#fff;facecolor:#000")
+    // setting clickable-object on parent doesn't seem to cover both children.
+    // so to make whole area clickable we also set this as a clickable object.
+    this.lower.setAttribute('clickable-object', "id:#info-panel");
+    this.lower.object3D.visible = true;
+    this.el.appendChild(this.lower);
+
+    this.lowerText = document.createElement('a-text');
+    this.lowerText.setAttribute('id', "lower-text")
+    this.lowerText.setAttribute('value', this.textbank['info-panel'].detail)
+    this.lowerText.setAttribute('position', "0 0 0.01")
+    this.lowerText.setAttribute('color', 'white')
+    this.lowerText.setAttribute('align', 'center')
+    this.lowerText.setAttribute('width', 1)
+    this.lowerText.setAttribute('wrap-count', 50)
+    this.lower.appendChild(this.lowerText);
 
     this.listeners = {
-      'click' : this.clickListener.bind(this)
+      'objectClicked' : this.objectListener.bind(this)
     }
-    this.plane.addEventListener("click", this.listeners.click);
-
+    this.el.addEventListener("objectClicked", this.listeners.objectClicked);
   },
 
-  clickListener: function() {
-    if (!this.expanded) {
-      this.expand();
-    }
-    else {
-      this.contract();
-    }
-  },
+  objectListener: function(event) {
 
-  expand: function() {
-    this.plane.setAttribute('height', this.data.tallheight);
-    this.text.setAttribute('value', this.title + "\n\n" + this.detail);
-    this.plane.object3D.position.y -= this.hOffsetExpanded;
-    this.expanded = true;
-  },
-
-  contract: function() {
-    this.plane.setAttribute('height', this.data.shortheight);
-    this.text.setAttribute('value', this.title);
-    this.plane.object3D.position.y += this.hOffsetExpanded;
-    this.expanded = false;
+    this.upperText.setAttribute('value', this.textbank[event.detail.id].title)
+    this.lowerText.setAttribute('value', this.textbank[event.detail.id].detail)
   }
 
 });
 
-// This component only works for elements in the world rotation reference.
-// (it does handle displacement offsets)
-// Only affects rotation about y axis, not x & z.
-AFRAME.registerComponent('rotate-to-face-player', {
 
-  schema : {
-    camera: {type: 'selector', default: "#camera"}
+AFRAME.registerComponent('clickable-object', {
+
+  schema: {
+    id: {type: 'selector'},
+    infopanel: {type: 'selector', default: '#info-panel'},
+    title: {type: 'selector', default: '#upper-text'},
+    detail: {type: 'selector', default: '#lower-text'}
   },
 
-  tick: function() {
-    this.trackCamera();
-  },
+  init: function () {
 
-  trackCamera: (function() {
+    this.el.setAttribute('class','clickable-object');
 
-    var vectorToCamera = new THREE.Vector3();
-    var cylindrical = new THREE.Cylindrical();
-    var worldPosition = new THREE.Vector3();
-
-    return function() {
-      // Get Camera World Position.
-      var camera = this.data.camera;
-      camera.object3D.updateMatrixWorld();
-      vectorToCamera.setFromMatrixPosition(camera.object3D.matrixWorld);
-
-      this.el.object3D.getWorldPosition(worldPosition)
-      vectorToCamera.sub(worldPosition);
-
-      // Determine angle to camera, and set this rotation on the object.
-      cylindrical.setFromVector3(vectorToCamera);
-      this.el.object3D.rotation.y = cylindrical.theta;
+    this.listeners = {
+      'click' : this.clickListener.bind(this)
     }
-  })()
+    this.el.addEventListener("click", this.listeners.click);
+  },
+
+  clickListener: function() {
+
+    this.data.infopanel.emit('objectClicked',{'id': this.data.id.id});
+  },
+
+});
+
+AFRAME.registerComponent('framed-block', {
+schema: {
+  height:     {type: 'number', default: 2},
+  width:      {type: 'number', default: 2},
+  depth:      {type: 'number', default: 2},
+  frame:      {type: 'number', default: 0.2},
+  framecolor: {type: 'color', default: '#000'},
+  facecolor:  {type: 'color', default: '#AAA'}
+},
+
+/**
+ * Initial creation and setting of the mesh.
+ */
+init: function () {
+  var data = this.data;
+  var el = this.el;
+
+  // Create geometry.
+  //this.geometry = new THREE.BoxBufferGeometry(data.width, data.height, data.depth);
+
+  const BIGX = this.data.width / 2
+  const BIGY = this.data.height / 2
+  const BIGZ = this.data.depth / 2
+  const SMALLX = this.data.width / 2 - this.data.frame
+  const SMALLY = this.data.height / 2 - this.data.frame
+  const SMALLZ = this.data.depth / 2 - this.data.frame
+
+  this.geometry = new THREE.BufferGeometry();
+  // Vertices - we have 3 vertices for each of the 8 corners of the cube.
+  // Every vertex has two "small" components, and one big one.
+  const vertices = new Float32Array( [
+     SMALLX,  SMALLY,    BIGZ,
+     SMALLX,    BIGY,  SMALLZ,
+     BIGX,    SMALLY,  SMALLZ,
+
+     SMALLX,  SMALLY,   -BIGZ,
+     SMALLX,    BIGY, -SMALLZ,
+     BIGX,    SMALLY, -SMALLZ,
+
+     SMALLX, -SMALLY,    BIGZ,
+     SMALLX,   -BIGY,  SMALLZ,
+     BIGX,   -SMALLY,  SMALLZ,
+
+     SMALLX, -SMALLY,   -BIGZ,
+     SMALLX,   -BIGY, -SMALLZ,
+     BIGX,   -SMALLY, -SMALLZ,
+
+    -SMALLX,  SMALLY,    BIGZ,
+    -SMALLX,    BIGY,  SMALLZ,
+    -BIGX,    SMALLY,  SMALLZ,
+
+    -SMALLX,  SMALLY,   -BIGZ,
+    -SMALLX,    BIGY, -SMALLZ,
+    -BIGX,    SMALLY, -SMALLZ,
+
+    -SMALLX, -SMALLY,    BIGZ,
+    -SMALLX,   -BIGY,  SMALLZ,
+    -BIGX,   -SMALLY,  SMALLZ,
+
+    -SMALLX, -SMALLY,   -BIGZ,
+    -SMALLX,   -BIGY, -SMALLZ,
+    -BIGX,   -SMALLY, -SMALLZ,
+  ] );
+
+  // itemSize = 3 because there are 3 values (components) per vertex
+  this.geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+
+  // Now we define the faces in terms of vertex indices.
+  const indices = []
+
+  // 8 corner triangles.
+  indices.push(0, 2, 1,
+               3, 4, 5,
+               6, 7, 8,
+               9, 11, 10,
+               12, 13, 14,
+               15, 17, 16,
+               18, 20, 19,
+               21, 22, 23);
+
+  // 12 edges.
+  createRectangle(1, 2, 4, 5)
+  createRectangle(0, 1, 12, 13)
+  createRectangle(2, 0, 8, 6)
+  createRectangle(4, 3, 16, 15)
+  createRectangle(3, 5, 9, 11)
+  createRectangle(7, 6, 19, 18)
+  createRectangle(8, 7, 11, 10)
+  createRectangle(9, 10, 21, 22)
+  createRectangle(12, 14, 18, 20)
+  createRectangle(14, 13, 17, 16)
+  createRectangle(17, 15, 23, 21)
+  createRectangle(19, 20, 22, 23)
+
+  // 6 faces.
+  createRectangle(6, 0, 18, 12)
+  createRectangle(3, 9, 15, 21)
+  createRectangle(1, 4, 13, 16)
+  createRectangle(10, 7, 22, 19)
+  createRectangle(5, 2, 11, 8)
+  createRectangle(14, 17, 20, 23)
+
+  function createRectangle(a, b, c, d) {
+    indices.push(a, b, c);
+    indices.push(c, b, d);
+  }
+
+  this.geometry.setIndex(indices);
+  this.geometry.computeVertexNormals();
+
+  // 8 + 2 x 12 = 32 triangles = 96 vertices for the "frame"
+  this.geometry.addGroup(0, 96, 0 );
+  // 2 x 6 = 12 triangles = 36 vertices for the faces.
+  this.geometry.addGroup(96, 36, 1);
+
+  // Create material.
+  this.frameMaterial = new THREE.MeshStandardMaterial({color: data.framecolor, roughness: 0.3});
+  this.faceMaterial = new THREE.MeshStandardMaterial({color: data.facecolor, roughness: 1.0});
+
+  // Create mesh.
+  this.mesh = new THREE.Mesh(this.geometry, [this.frameMaterial, this.faceMaterial]);
+
+  // Set mesh on entity.
+  el.setObject3D('mesh', this.mesh);
+}
 });

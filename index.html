@@ -10,8 +10,10 @@
   <body>
     <a-scene renderer="colorManagement:true" stats
              cursor="rayOrigin: mouse; fuse: false"
-             raycaster="objects: .caption">
+             raycaster="objects: .clickable-object">
       <a-assets>
+        <a-asset-item id="text" src="./assets/text/text.json">
+        </a-asset-item>
         <a-asset-item id="earth"
            src="./assets/earth/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
@@ -67,10 +69,14 @@
 
         <a-entity id="camera" camera position="0 1.6 0" look-controls>
         </a-entity>
-        <a-entity id="scale" position="0 1 -0.8" scale-ruler="target:#scale-container">
+        <a-entity id="scale" position="0 1.05 -0.85" rotation = "-45 0 0" scale-ruler="target:#scale-container">
+        </a-entity>
+        <a-entity id="info-panel" position="0 0.65 -0.45"
+                  rotation = "-45 0 0" info-panel
+                  clickable-object="id:#info-panel">
         </a-entity>
         <a-entity id="rhand"
-                  laser-controls="hand: right" raycaster="objects: .caption; lineColor: red; lineOpacity: 0.5"
+                  laser-controls="hand: right" raycaster="objects: .clickable-object; lineColor: red; lineOpacity: 0.5"
                   hand-controls="hand: right">
         </a-entity>
         <a-entity id="lhand"
@@ -99,11 +105,13 @@
                     scale="10 10 10">
           </a-entity>
           <a-entity id="eiffel" position="100 -2 0"
+                    clickable-object="id:#eiffel"
                     rotation="0 0 0"
                     gltf-model="#eiffel"
                     scale="2 2 2">
           </a-entity>
           <a-entity id="trex" position="-3 -1 0"
+                    clickable-object="id:#trex"
                     gltf-model="#trex"
                     scale="0.06 0.06 0.06">
           </a-entity>
