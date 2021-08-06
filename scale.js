@@ -8,8 +8,9 @@ AFRAME.registerComponent('scalable', {
 
   init: function() {
 
-    // The speed at which we scale in/out.  Multiply by this once per key-press.
-    this.scaleSpeed = Math.pow(10, 0.1)
+    // The speed at which we scale in/out.
+    // This is a rate per second.  Take a root of this to get a scaling factor.
+    this.scaleSpeed = 10;
 
     // vector used for calculating re-centering
     this.vectorFromCenter = new THREE.Vector3();
@@ -19,15 +20,12 @@ AFRAME.registerComponent('scalable', {
 
     // listeners for scaling events (key presses)
     this.listeners = {
-      'scaleOut' : this.scaleOut.bind(this),
-      'scaleIn' : this.scaleIn.bind(this)
+      'scaleOut' : this.scaleOutEvent.bind(this),
+      'scaleIn' : this.scaleInEvent.bind(this)
     }
     this.el.addEventListener("scale-out", this.listeners.scaleOut);
     this.el.addEventListener("scale-in", this.listeners.scaleIn);
 
-    // ticks are used for scaling states (for oculus controllers)
-    // keep tick rate down to 10/second
-    this.tick = AFRAME.utils.throttleTick(this.tick, 100, this);
   },
 
   update: function () {
@@ -36,26 +34,39 @@ AFRAME.registerComponent('scalable', {
   },
 
   // listener for scale out event
-  scaleOut: function() {
-    this.el.object3D.scale.multiplyScalar(this.scaleSpeed);
+  scaleInEvent: function() {
+    // scale in as if 100 msecs have passed.
+    this.scaleIn(100);
+  },
+
+  scaleOutEvent: function() {
+    // scale out as if 100 msecs have passed.
+    this.scaleOut(100);
+  },
+
+  scaleOut: function(timeDelta) {
+
+    const scalar = Math.pow(this.scaleSpeed, timeDelta/1000);
+    this.el.object3D.scale.multiplyScalar(scalar);
 
     // adjust center.
     this.vectorFromCenter.subVectors(this.el.object3D.position,
                                    this.center.object3D.position);
-    this.vectorFromCenter.multiplyScalar(this.scaleSpeed);
+    this.vectorFromCenter.multiplyScalar(scalar);
     this.el.object3D.position.addVectors(this.center.object3D.position,
                                          this.vectorFromCenter);
     this.adjustChildrenVisibility();
   },
 
   // listener for scale in event
-  scaleIn: function() {
-    this.el.object3D.scale.divideScalar(this.scaleSpeed);
+  scaleIn: function(timeDelta) {
+    const scalar = Math.pow(this.scaleSpeed, timeDelta/1000);
+    this.el.object3D.scale.divideScalar(scalar);
 
     // adjust center.
     this.vectorFromCenter.subVectors(this.el.object3D.position,
                                    this.center.object3D.position);
-    this.vectorFromCenter.divideScalar(this.scaleSpeed);
+    this.vectorFromCenter.divideScalar(scalar);
     this.el.object3D.position.addVectors(this.center.object3D.position,
                                          this.vectorFromCenter);
     this.adjustChildrenVisibility();
@@ -63,7 +74,7 @@ AFRAME.registerComponent('scalable', {
 
   // Once object world scale is below 1 in 1M, we cull it.
   // could be smarter and actually use the bounding sphere of the object
-  // but not trivisl to find it, and don't want to repeat this every time
+  // but not trivial to find it, and don't want to repeat this every time
   // we zoom in / out.
   // rough logic would be:
   // from the Object3D, traverse children until we find one of type = 'Mesh'
@@ -87,14 +98,14 @@ AFRAME.registerComponent('scalable', {
   },
 
 
-  tick: function() {
+  tick: function(time, timeDelta) {
 
     // if we are in a scaling in or out state, execute the scaling.
     if (this.el.is("scaling-in")) {
-      this.scaleIn();
+      this.scaleIn(timeDelta);
     }
     else if (this.el.is("scaling-out")) {
-      this.scaleOut();
+      this.scaleOut(timeDelta);
     }
   }
 });
