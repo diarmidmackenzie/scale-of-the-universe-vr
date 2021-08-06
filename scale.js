@@ -401,3 +401,103 @@ AFRAME.registerComponent('thumbstick-states', {
     }
   }
 });
+
+AFRAME.registerComponent('caption', {
+
+  schema : {
+    object: {type: 'selector'},
+    shortheight: {type: 'number', default: 0.5},
+    tallheight: {type: 'number', default: 2}
+  },
+
+  init : function () {
+    this.title = "Tyrannosaurus Rex"
+    this.detail = "Tyrannosaurus Rex was the largest land predator ever to walk the earth.  Fully grown adults could measure 12-13m in length, and weighed between 9 and 14 tons."
+    this.hOffsetExpanded = (this.data.tallheight - this.data.shortheight) / 2;
+    this.expanded = false;
+
+    this.plane = document.createElement('a-plane');
+    this.plane.setAttribute('color', 'grey')
+    this.plane.setAttribute('width', 2)
+    this.plane.setAttribute('height', 0.5)
+    this.plane.setAttribute('rotate-to-face-player', "")
+    this.plane.setAttribute('class', "caption")
+    this.plane.setAttribute('animation__scale', "property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter");
+    this.plane.setAttribute('animation__scale_reverse', "property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave");
+    this.el.appendChild(this.plane);
+
+    this.text = document.createElement('a-text');
+    this.text.setAttribute('value', this.title)
+    this.text.setAttribute('color', 'black')
+    this.text.setAttribute('align', 'center')
+    this.text.setAttribute('width', 2)
+    this.text.setAttribute('wrap-count', 20)
+
+    this.plane.appendChild(this.text);
+
+    this.listeners = {
+      'click' : this.clickListener.bind(this)
+    }
+    this.plane.addEventListener("click", this.listeners.click);
+
+  },
+
+  clickListener: function() {
+    if (!this.expanded) {
+      this.expand();
+    }
+    else {
+      this.contract();
+    }
+  },
+
+  expand: function() {
+    this.plane.setAttribute('height', this.data.tallheight);
+    this.text.setAttribute('value', this.title + "\n\n" + this.detail);
+    this.plane.object3D.position.y -= this.hOffsetExpanded;
+    this.expanded = true;
+  },
+
+  contract: function() {
+    this.plane.setAttribute('height', this.data.shortheight);
+    this.text.setAttribute('value', this.title);
+    this.plane.object3D.position.y += this.hOffsetExpanded;
+    this.expanded = false;
+  }
+
+});
+
+// This component only works for elements in the world rotation reference.
+// (it does handle displacement offsets)
+// Only affects rotation about y axis, not x & z.
+AFRAME.registerComponent('rotate-to-face-player', {
+
+  schema : {
+    camera: {type: 'selector', default: "#camera"}
+  },
+
+  tick: function() {
+    this.trackCamera();
+  },
+
+  trackCamera: (function() {
+
+    var vectorToCamera = new THREE.Vector3();
+    var cylindrical = new THREE.Cylindrical();
+    var worldPosition = new THREE.Vector3();
+
+    return function() {
+      // Get Camera World Position.
+      var camera = this.data.camera;
+      camera.object3D.updateMatrixWorld();
+      vectorToCamera.setFromMatrixPosition(camera.object3D.matrixWorld);
+
+      this.el.object3D.getWorldPosition(worldPosition)
+      vectorToCamera.sub(worldPosition);
+
+      // Determine angle to camera, and set this rotation on the object.
+      cylindrical.setFromVector3(vectorToCamera);
+      this.el.object3D.rotation.y = cylindrical.theta;
+    }
+  })()
+});

@@ -8,7 +8,9 @@
     <script src="./scale.js"></script>
   </head>
   <body>
-    <a-scene renderer="colorManagement:true" stats>
+    <a-scene renderer="colorManagement:true" stats
+             cursor="rayOrigin: mouse; fuse: false"
+             raycaster="objects: .caption">
       <a-assets>
         <a-asset-item id="earth"
            src="./assets/earth/scene.gltf"
@@ -68,6 +70,7 @@
         <a-entity id="scale" position="0 1 -0.8" scale-ruler="target:#scale-container">
         </a-entity>
         <a-entity id="rhand"
+                  laser-controls="hand: right" raycaster="objects: .caption; lineColor: red; lineOpacity: 0.5"
                   hand-controls="hand: right">
         </a-entity>
         <a-entity id="lhand"
@@ -103,6 +106,9 @@
           <a-entity id="trex" position="-3 -1 0"
                     gltf-model="#trex"
                     scale="0.06 0.06 0.06">
+          </a-entity>
+          <a-entity caption="object:#trex"
+                  position="-0.5 2.5 1">
           </a-entity>
           <a-entity id="chicken" position="1 0 0"
                     gltf-model="#chicken"
