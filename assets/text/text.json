@@ -17,7 +17,7 @@
   "jupiter": {
     "title": "Jupiter",
     "detail": "Jupiter is the largest planet in our Solar System.\n\nIt has a diameter of 139,820km (10% of the diameter of the sun), meaning that it is more than 1300 times bigger than Earth in volume.\n\nHowever it is much less dense than Earth, so only has 318 times the mass of Earth.",
-    "credit" : "3D model by Mike Roth via Sketchfab."
+    "credit" : "3D model by Mieke Roth via Sketchfab."
   },
   "earth": {
     "title": "Earth",
@@ -27,7 +27,7 @@
   "moon": {
     "title": "The Moon",
     "detail": "Lots of planets have moons, but when we say 'The Moon' we are usually referring to the Earth's moon.\n\nThe diameter of the moon is 3,475km, which is less than a third of the diameter of Earth.\n\nThe moon is tidally locked to Earth, meaning that on Earth we always see the same side of the moon.\n\nIn reality the moon is actually 20 times further from Earth than you see in this simulation, at a distance of 384,400km.",
-    "credit" : "3D model by Alan Zimmerman via Sketchfab."
+    "credit" : "3D model by Akshat via Sketchfab."
   },
   "deimos": {
     "title": "Deimos",
