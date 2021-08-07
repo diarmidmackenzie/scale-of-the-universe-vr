@@ -14,18 +14,9 @@
       <a-assets>
         <a-asset-item id="text" src="./assets/text/text.json">
         </a-asset-item>
-        <a-asset-item id="earth"
-           src="./assets/earth/scene.gltf"
-           response-type="arraybuffer" crossorigin="anonymous">
-        </a-asset-item>
-        <a-asset-item id="deimos"
-           src="./assets/deimos/scene.gltf"
-           response-type="arraybuffer" crossorigin="anonymous">
-        </a-asset-item>
-        <a-asset-item id="eiffel"
-           src="./assets/eiffel/scene.gltf"
-           response-type="arraybuffer" crossorigin="anonymous">
-        </a-asset-item>
+        <!-- Assets ordered in order likely to be encountered.
+             human scale objects first, then moving to extremes in
+             each direction-->
         <a-asset-item id="trex"
            src="./assets/t-rex/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
@@ -34,20 +25,48 @@
            src="./assets/chicken/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
+        <a-asset-item id="eiffel"
+           src="./assets/eiffel/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
         <a-asset-item id="ant"
            src="./assets/ant/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
+        <a-asset-item id="elcapitan"
+           src="./assets/el-capitan/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
         <a-asset-item id="cell"
            src="./assets/cell/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
+        <a-asset-item id="deimos"
+           src="./assets/deimos/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
         <a-asset-item id="virus"
            src="./assets/virus/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
+        <a-asset-item id="moon"
+           src="./assets/moon/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
         <a-asset-item id="glucose"
            src="./assets/glucose/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
+        <a-asset-item id="earth"
+           src="./assets/earth/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
+        <a-asset-item id="jupiter"
+           src="./assets/jupiter/scene.gltf"
+           response-type="arraybuffer" crossorigin="anonymous">
+        </a-asset-item>
+        <a-asset-item id="sun"
+           src="./assets/sun/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
       </a-assets>
@@ -96,21 +115,56 @@
                                          #rhand.gripup=%scaling-in,
                                          KeyN=$scaling-out,
                                          KeyM=$scaling-in">
+         <!-- Milky way image is 1m x 1m.  vs. actual diam. of 1 x 10^21 meters-->
+         <a-entity id="milkyway" position="1e+21 0 0"
+                   rotation = "0 -45 0"
+                   scale="1e+21 1e+21 1e+21">
+             <a-image src="./assets/milkyway/milkyway.png"
+                      clickable-object="id:#milkyway">
+             </a-image>
+         </a-entity>
+         <!-- Sun model is 21m vs. actual diam. of 1.39M km-->
+         <a-entity id="sun" position="-2e+9 0 0"
+                   gltf-model="#sun"
+                   clickable-object="id:#sun"
+                   scale="6.62e+7 6.62e+7 6.62e+7">
+         </a-entity>
+         <!-- Jupiter model is 2.13m vs. actual diam. of 1.39M km-->
+         <a-entity id="jupiter" position="4e+8 0 0"
+                   gltf-model="#jupiter"
+                   clickable-object="id:#jupiter"
+                   scale="6.56e+7 6.56e+7 6.56e+7">
+         </a-entity>
+         <!-- Earth model is 8470m vs. actual diam. of 12742 km-->
           <a-entity id="earth" position="16000000 0 0"
                     gltf-model="#earth"
                     clickable-object="id:#earth"
-                    scale="1600 1600 1600">
+                    scale="1500 1500 1500">
+          </a-entity>
+          <!-- Moon model is 209m vs. actual diam. of 3475 km-->
+          <a-entity id="moon" position="-4000000 0 0"
+                    gltf-model="#moon"
+                    clickable-object="id:#moon"
+                    scale="16600 16600 16600">
           </a-entity>
           <a-entity id="deimos" position="-1000 0 -10000"
                     gltf-model="#deimos"
                     clickable-object="id:#deimos"
                     scale="10 10 10">
           </a-entity>
+          <!-- El Capitan cliff model height is ~4.5m vs. actual height of 914m-->
+          <a-entity id="elcapitan" position="-2000 450 1000"
+                    clickable-object="id:#elcapitan"
+                    rotation="0 45 0"
+                    gltf-model="#elcapitan"
+                    scale="200 200 200">
+          </a-entity>
+          <!-- Model height is 114m from top of dome to base vs. actual height of 300m-->
           <a-entity id="eiffel" position="100 -2 0"
                     clickable-object="id:#eiffel"
                     rotation="0 0 0"
                     gltf-model="#eiffel"
-                    scale="2 2 2">
+                    scale="2.63 2.63 2.63">
           </a-entity>
           <a-entity id="trex" position="-3 -1 0"
                     clickable-object="id:#trex"
