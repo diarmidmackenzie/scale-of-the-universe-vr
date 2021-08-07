@@ -1,14 +1,52 @@
 {
-  "trex": {
-    "title": "Tyrannosaurus Rex",
-    "detail": "Tyrannosaurus Rex was the largest land predator ever to walk the earth.  Fully grown adults could measure 12-13m in length, and weighed between 9 and 14 tons."
+  "info-panel": {
+    "title": "Welcome to The Scale of the Universe VR",
+    "detail": "Left grip will zoom in.  Right grip to zoom out.\n\nPoint and click at an object to learn more about it.\n\nLeft thumbstick to move forwards, backwards left and right.\n\nRight thumbstick to turn left or right, and move up or down.\n\nBased on a concept by Cary Huang.",
+    "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
+  },
+  "earth": {
+    "title": "Earth",
+    "detail": "Earth is the third planet orbiting an unremarkable star, in an unremarkable part of an unremarkable galaxy.\n\nHowever it is notable for being the only planet that we know of that harbours life.\n\nScientists have even found some evidence of intelligent lifeforms living on this planet.\n\nEarth has a diameter of 12,742 km.",
+    "credit" : "3D model by Alan Zimmerman via Sketchfab."
+  },
+  "deimos": {
+    "title": "Deimos",
+    "detail": "Deimos is the smaller, and outermost, of Mars's two moons.\n\nIt is a small moon, only about 12km across, and orbits Mars every 30.3 hours, at a distance of 23,500km.",
+    "credit" : "3D model by uperisito via Sketchfab."
   },
   "eiffel": {
     "title": "The Eiffel Tower",
-    "detail": "The Eiffel Tower was built in Paris, France in 1889 to celebrate the 100th anniversary of the French Revolution.  It is 300 m tall."
+    "detail": "The Eiffel Tower was built in Paris, France in 1889 to celebrate the 100th anniversary of the French Revolution.\n\nIt is 324m tall (to the top of the spire).",
+    "credit" : "3D model by SDC via Sketchfab."
   },
-  "info-panel": {
-    "title": "Welcome to The Scale of the Universe VR",
-    "detail": "Left grip will zoom in.  Right grip to zoom out.\n\nPoint and click at an object to learn more about it.\n\nLeft thumbstick to move forwards, backwards left and right.\n\nRight thumbstick to turn left or right, and move up or down."
+  "trex": {
+    "title": "Tyrannosaurus Rex",
+    "detail": "Tyrannosaurus Rex was the largest land predator ever to walk the earth.\n\nFully grown adults could measure 12-13m in length, and weighed between 9 and 14 tons.\n\nTyrannosaurus became extinct 65 million years ago, when an asteroid struck the earth, leading to a mass extinction event.",
+    "credit" : "3D model by AVINAS via Sketchfab."
+  },
+  "chicken": {
+    "title": "Chicken",
+    "detail": "The chicken is a domesticated bird.  They are commonly kept for egg production, and also eaten as meat.\n\nThere are 26 billion chickens in the world: more than 3 times as many as there are humans.",
+    "credit" : "3D model by pooiloui2 via Sketchfab."
+  },
+  "ant": {
+    "title": "Ant",
+    "detail": "The ant is a small insect that lives in highly organized large societies.\n\nThere are many species of ant, and they vary greatly in size, from species that are less than a millimeter, to species that are over 50mm in length.\n\nThis model shows a typical common ant, about 6mm in length.",
+    "credit" : "3D model by N1K via Sketchfab."
+  },
+  "cell": {
+    "title": "Animal Cell",
+    "detail": "This is a model of a typical animal cell.\n\nThe colors are used to highlight the different elements of the cell - they are not realistic.\n\nA typical animal cell is 10-20 micrometers in diameter.",
+    "credit" : "3D model by Lauri Purhonen via Sketchfab."
+  },
+  "virus": {
+    "title": "Coronavirus",
+    "detail": "This is the SARS-CoV-2 virus that caused the COVID-19 pandemic, which began in 2020.\n\nThe virus is approximately 100 nanometers in diameter.\n\nThe red spikes on the virus are the infamous 'spike proteins', which it uses to attack cells.",
+    "credit" : "3D model by Teliri via Sketchfab."
+  },
+  "glucose": {
+    "title": "Glucose molecule",
+    "detail": "Glucose is the simplest, and most common, form of sugar.\n\nThis is a model of a single molecule of glucose.\n\nGlucose has the molecular formula C6H12O6.\n\nIn this model, carbon atoms are black, oxygen atoms are red, and hydrogen atoms are white.\n\nA single molecule is approximately 1.5 nanometers across.",
+    "credit" : "3D model by Lucas.Presoto via Sketchfab."
   }
 }

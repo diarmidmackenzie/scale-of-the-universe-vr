@@ -67,7 +67,7 @@
                                                   bindings:y-minus,y-plus,y-rot-minus,y-rot-plus">
 
 
-        <a-entity id="camera" camera position="0 1.6 0" look-controls>
+        <a-entity id="camera" position="0 1.6 0" look-controls>
         </a-entity>
         <a-entity id="scale" position="0 1.05 -0.85" rotation = "-45 0 0" scale-ruler="target:#scale-container">
         </a-entity>
@@ -98,10 +98,12 @@
                                          KeyM=$scaling-in">
           <a-entity id="earth" position="16000000 0 0"
                     gltf-model="#earth"
+                    clickable-object="id:#earth"
                     scale="1600 1600 1600">
           </a-entity>
           <a-entity id="deimos" position="-1000 0 -10000"
                     gltf-model="#deimos"
+                    clickable-object="id:#deimos"
                     scale="10 10 10">
           </a-entity>
           <a-entity id="eiffel" position="100 -2 0"
@@ -115,27 +117,29 @@
                     gltf-model="#trex"
                     scale="0.06 0.06 0.06">
           </a-entity>
-          <a-entity caption="object:#trex"
-                  position="-0.5 2.5 1">
-          </a-entity>
           <a-entity id="chicken" position="1 0 0"
+                    clickable-object="id:#chicken"
                     gltf-model="#chicken"
                     scale="0.4 0.4 0.4">
           </a-entity>
           <a-entity id="ant" position="0.01 0 0"
+                    clickable-object="id:#ant"
                     gltf-model="#ant"
                     rotation="0 90 0"
                     scale="0.002 0.002 0.002">
           </a-entity>
           <a-entity id="cell" position="-0.000025 0 0"
+                    clickable-object="id:#cell"
                     gltf-model="#cell"
                     scale="0.0000025 0.0000025 0.0000025">
           </a-entity>
           <a-entity id="virus" position="0.0000003 0 0"
+                    clickable-object="id:#virus"
                     gltf-model="#virus"
                     scale="0.000000001 0.000000001 0.000000001">
           </a-entity>
           <a-entity id="glucose" position="-0.000000002 0 0"
+                    clickable-object="id:#glucose"
                     gltf-model="#glucose"
                     scale="0.000000000005 0.000000000005 0.000000000005">
           </a-entity>

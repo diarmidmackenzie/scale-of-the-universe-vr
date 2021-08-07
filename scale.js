@@ -411,14 +411,7 @@ AFRAME.registerComponent('info-panel', {
   },
 
   init : function () {
-    this.title = "Welcome to The Scale of the Universe VR"
-    this.detail = `Left grip will zoom in.  Right grip to zoom out.\n
-                   Point and click at an object to learn more about it.\n
-                   Left thumbstick to move forwards, backwards left and right.\n
-                   Right thumbstick to turn left or right, and move up or down.`
-    this.hOffsetExpanded = (this.data.tallheight - this.data.shortheight) / 2;
-    this.expanded = true;
-    console.log("JSON: " + this.data.textbank.data);
+    //console.log("JSON: " + this.data.textbank.data);
 
     this.textbank = JSON.parse(this.data.textbank.data);
 
@@ -434,7 +427,7 @@ AFRAME.registerComponent('info-panel', {
     this.upperText.setAttribute('value', this.textbank['info-panel'].title)
     this.upperText.setAttribute('color', 'white')
     this.upperText.setAttribute('align', 'center')
-    this.upperText.setAttribute('width', 1)
+    this.upperText.setAttribute('width', 0.9)
     this.upperText.setAttribute('wrap-count', 40)
     this.upper.appendChild(this.upperText);
 
@@ -443,7 +436,6 @@ AFRAME.registerComponent('info-panel', {
     // setting clickable-object on parent doesn't seem to cover both children.
     // so to make whole area clickable we also set this as a clickable object.
     this.lower.setAttribute('clickable-object', "id:#info-panel");
-    this.lower.object3D.visible = true;
     this.el.appendChild(this.lower);
 
     this.lowerText = document.createElement('a-text');
@@ -452,9 +444,27 @@ AFRAME.registerComponent('info-panel', {
     this.lowerText.setAttribute('position', "0 0 0.01")
     this.lowerText.setAttribute('color', 'white')
     this.lowerText.setAttribute('align', 'center')
-    this.lowerText.setAttribute('width', 1)
+    this.lowerText.setAttribute('width', 0.9)
     this.lowerText.setAttribute('wrap-count', 50)
     this.lower.appendChild(this.lowerText);
+
+    this.credit = document.createElement('a-entity');
+    this.credit.setAttribute('framed-block', "height:0.1;width:1;depth:0.02;frame:0.004;framecolor:#fff;facecolor:#000")
+    this.credit.setAttribute('position', "0 -0.25 0")
+    // setting clickable-object on parent doesn't seem to cover all children.
+    // so to make whole area clickable we also set this as a clickable object.
+    this.credit.setAttribute('clickable-object', "id:#info-panel");
+    this.el.appendChild(this.credit);
+
+    this.creditText = document.createElement('a-text');
+    this.creditText.setAttribute('id', "credit-text")
+    this.creditText.setAttribute('value', this.textbank['info-panel'].credit)
+    this.creditText.setAttribute('position', "0 0 0.01")
+    this.creditText.setAttribute('color', 'white')
+    this.creditText.setAttribute('align', 'center')
+    this.creditText.setAttribute('width', 0.9)
+    this.creditText.setAttribute('wrap-count', 50)
+    this.credit.appendChild(this.creditText);
 
     this.listeners = {
       'objectClicked' : this.objectListener.bind(this)
@@ -464,8 +474,9 @@ AFRAME.registerComponent('info-panel', {
 
   objectListener: function(event) {
 
-    this.upperText.setAttribute('value', this.textbank[event.detail.id].title)
-    this.lowerText.setAttribute('value', this.textbank[event.detail.id].detail)
+    this.upperText.setAttribute('value', this.textbank[event.detail.id].title);
+    this.lowerText.setAttribute('value', this.textbank[event.detail.id].detail);
+    this.creditText.setAttribute('value', this.textbank[event.detail.id].credit);
   }
 
 });
@@ -475,7 +486,7 @@ AFRAME.registerComponent('clickable-object', {
 
   schema: {
     id: {type: 'selector'},
-    infopanel: {type: 'selector', default: '#info-panel'}    
+    infopanel: {type: 'selector', default: '#info-panel'}
   },
 
   init: function () {
