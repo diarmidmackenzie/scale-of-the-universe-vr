@@ -259,6 +259,48 @@ function formatNumber(number) {
 }
 
 // Entity is moved based on setting/clearing states
+// y-rot-plus/minus for rotation.
+// Nothing else supported - could easily be extended when required.
+// Movement speed is configurable in m/s (currently unused).
+// Rotation speed is configurable in degrees/event
+
+AFRAME.registerComponent('event-driven-movement', {
+  schema: {
+     moverate:   {type: 'number', default: '2'},
+     rotaterate: {type: 'number', default: '45'},
+  },
+
+  init: function() {
+    this.listeners = {
+      yRotPlus: this.yRotPlus.bind(this),
+      yRotMinus: this.yRotMinus.bind(this),
+    }
+  },
+
+  update: function() {
+
+    // internally store rotation rate as radians per event
+    this.rotateRate = this.data.rotaterate * Math.PI / 180;
+
+    this.el.addEventListener('y-rot-plus',
+                             this.listeners.yRotPlus,
+                             false);
+    this.el.addEventListener('y-rot-minus',
+                             this.listeners.yRotMinus,
+                             false);
+  },
+
+  yRotPlus: function() {
+    this.el.object3D.rotation.y += this.rotateRate;
+  },
+
+  yRotMinus: function() {
+    this.el.object3D.rotation.y -= this.rotateRate;
+  }
+
+});
+
+// Entity is moved based on setting/clearing states
 // x/y/z-plus/minus for position
 // x/y/z-rot-plus/minus for rotation
 // Movement speed is configurable in m/s
@@ -268,6 +310,7 @@ AFRAME.registerComponent('state-driven-movement', {
   schema: {
      moverate:   {type: 'number', default: '2'},
      rotaterate: {type: 'number', default: '45'},
+
   },
 
   update: function() {
@@ -399,6 +442,84 @@ AFRAME.registerComponent('thumbstick-states', {
     {
       this.el.removeState(this.yplus)
       this.el.removeState(this.yminus)
+    }
+  }
+});
+
+// Params as per thumbstick-states
+// cooldown: number of msecs between successive occurences of a single event.
+AFRAME.registerComponent('thumbstick-events', {
+  schema: {
+     controller:   {type: 'selector', default: "#lhand"},
+     bindings:     {type: 'array', default: "z-minus,z-plus,x-minus,x-plus"},
+     sensitivity:  {type: 'number', default: 0.5},
+     cooldown:      {type: 'number', default: 500}
+  },
+
+  multiple: true,
+
+  init: function() {
+    this.controller = this.data.controller;
+
+    this.listeners = {
+      thumbstickMoved: this.thumbstickMoved.bind(this),
+    }
+  },
+
+  update: function() {
+
+    this.yplus = this.data.bindings[0]
+    this.yminus = this.data.bindings[1]
+    this.xplus = this.data.bindings[2]
+    this.xminus = this.data.bindings[3]
+    this.yplusBlocked = false;
+    this.yminusBlocked = false;
+    this.xplusBlocked = false;
+    this.xminusBlocked = false;
+
+    this.controller.addEventListener('thumbstickmoved',
+                                     this.listeners.thumbstickMoved,
+                                     false);
+
+  },
+
+  thumbstickMoved: function(event) {
+
+    const x = event.detail.x
+    const y = event.detail.y
+
+    if (Math.abs(x) > this.data.sensitivity) {
+      if (x > 0) {
+        if (!this.xplusBlocked) {
+          this.el.emit(this.xplus)
+          this.xplusBlocked = true;
+          setTimeout(() => {this.xplusBlocked = false}, this.data.cooldown);
+        }
+      }
+      else {
+        if (!this.xminusBlocked) {
+          this.el.emit(this.xminus)
+          this.xminusBlocked = true;
+          setTimeout(() => {this.xminusBlocked = false}, this.data.cooldown);
+        }
+      }
+    }
+
+    if (Math.abs(y) > this.data.sensitivity) {
+      if (y > 0) {
+        if (!this.yplusBlocked) {
+          this.el.emit(this.yplus)
+          this.yplusBlocked = true;
+          setTimeout(() => {this.yplusBlocked = false}, this.data.cooldown);
+        }
+      }
+      else {
+        if (!this.yminusBlocked) {
+          this.el.emit(this.yminus)
+          this.yminusBlocked = true;
+          setTimeout(() => {this.yminusBlocked = false}, this.data.cooldown);
+        }
+      }
     }
   }
 });

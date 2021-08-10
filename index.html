@@ -71,18 +71,15 @@
         </a-asset-item>
       </a-assets>
 
-      <a-entity id="rig" movement-controls="controls:keyboard,touch"
-                         thumbstick-object-control="movestick:#lhand;
-                                                    rotatestick:none;
-                                                    moverepeattime:1;
-                                                    axes:XZ;
-                                                    posunit:0.05"
-                         state-driven-movement
+      <a-entity id="rig" movement-controls="fly:true"
+                         event-driven-movement
                          key-bindings="bindings:ShiftLeft=$y-plus,
                                                 ControlLeft=$y-minus,
-                                                KeyQ=$y-rot-plus,
-                                                KeyE=$y-rot-minus"
+                                                KeyQ=y-rot-plus,
+                                                KeyE=y-rot-minus"
                          thumbstick-states__right="controller:#rhand;
+                                                  bindings:y-minus,y-plus,y-rot-minus,y-rot-plus"
+                         thumbstick-events__right="controller:#rhand;
                                                   bindings:y-minus,y-plus,y-rot-minus,y-rot-plus">
 
 
