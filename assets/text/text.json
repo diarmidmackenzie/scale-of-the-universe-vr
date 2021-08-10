@@ -9,6 +9,16 @@
     "detail": "The Milky Way is the galaxy that we live in.\n\nIt measures about 100,000 light year across, and is estimated to contain several hundred billion stars, of which our sun is just one.\n\nThe Milky Way is just one of an estimated two trillion galaxies within the observable universe.",
     "credit" : "Image courtesy NASA / JPL-Caltech / R.Hurt (SSC Caltech)."
   },
+  "largemegallaniccloud": {
+    "title": "The Large Megallanic Cloud",
+    "detail": "The Large Megallanic Cloud is a satellite galaxy of the Milky Way.  It is approximately 160,000 light years away from the Milky Way, with a diameter of approximately 14,000 light years.\n\nIt is predicted that it will collide with the Milky Way in 2.4 billion years.",
+    "credit" : "Image by ESA/NASA/JPL-Caltech/STScI."
+  },
+  "crabnebula": {
+    "title": "The Crab Nebula",
+    "detail": "The Crab Nebula is the remnant of a supernova explosion that was seen on Earth in 1054 CE.  It has a diameter of 11 light years, and is expanding at 0.5% of the speed of light (0.5 light years every 100 years)\n\nAt its center lies a neutron star just 29km across, which spins 30.2 times per second, pulsing out radio waves including X-rays and Gamma rays.   In 2003 Titan moved in front of the Crab Nebula, and the reduction in the intensity of these radio waves was used to measure the thickness of Titan's atmosphere.",
+    "credit" : "Image by NASA, ESA, J. Hester and A. Loll (Arizona State University)."
+  },
   "sun": {
     "title": "The Sun",
     "detail": "The Sun is our nearest star.  Its diameter is about 1.39 million km, and it is 151.7 million km from Earth - a distance known as 1 A.U. (Astronomical Unit).\n\nAlthough from Earth it looks far larger than any other star, it is in fact fairly average, as stars go.\n\nThe Sun is roughly in the middle of its lifecycle.  It has existed for about 4.6 billion years, and will die in about 5.5 billion years' time.",

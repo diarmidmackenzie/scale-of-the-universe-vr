@@ -123,6 +123,22 @@
                       clickable-object="id:#milkyway">
              </a-image>
          </a-entity>
+         <!-- LMC image is 1m x 1m.  vs. actual diam. of 14,000ly = 1.325e+20 meters-->
+         <a-entity id="largemegallaniccloud" position="-1.325e+20 0 0"
+                   rotation = "0 45 0"
+                   scale="1.325e+20 1.325e+20 1.325e+20">
+             <a-image src="./assets/large-megallanic-cloud/large-megallanic-cloud.png"
+                      clickable-object="id:#largemegallaniccloud">
+             </a-image>
+         </a-entity>
+         <!-- Crab Nebula image is 1m x 1m.  vs. actual diam. of 11ly = 1.041e+17 meters-->
+         <a-entity id="crabnebula" position="-1.041e+17 0 0"
+                   rotation = "0 45 0"
+                   scale="1.041e+17 1.041e+17 1.041e+17">
+             <a-image src="./assets/crab-nebula/crab-nebula.png"
+                      clickable-object="id:#crabnebula">
+             </a-image>
+         </a-entity>
          <!-- Sun model is 21m vs. actual diam. of 1.39M km-->
          <a-entity id="sun" position="-2e+9 0 0"
                    gltf-model="#sun"
