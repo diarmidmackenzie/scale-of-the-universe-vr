@@ -414,6 +414,15 @@ AFRAME.registerComponent('info-panel', {
     //console.log("JSON: " + this.data.textbank.data);
 
     this.textbank = JSON.parse(this.data.textbank.data);
+    var sceneEl = document.querySelector('a-scene');
+    var textData;
+    if (sceneEl.is('vr-mode')) {
+      textData = this.textbank['info-panel'];
+    }
+    else
+    {
+      textData = this.textbank['info-panel-desktop'];
+    }
 
     this.upper = document.createElement('a-entity');
     this.upper.setAttribute('framed-block', "height:0.1;width:1;depth:0.02;frame:0.004;framecolor:#fff;facecolor:#000")
@@ -424,7 +433,7 @@ AFRAME.registerComponent('info-panel', {
     this.upperText = document.createElement('a-text');
     this.upperText.setAttribute('id', "upper-text")
     this.upperText.setAttribute('position', "0 0 0.01")
-    this.upperText.setAttribute('value', this.textbank['info-panel'].title)
+    this.upperText.setAttribute('value', textData.title)
     this.upperText.setAttribute('color', 'white')
     this.upperText.setAttribute('align', 'center')
     this.upperText.setAttribute('width', 0.9)
@@ -440,7 +449,7 @@ AFRAME.registerComponent('info-panel', {
 
     this.lowerText = document.createElement('a-text');
     this.lowerText.setAttribute('id', "lower-text")
-    this.lowerText.setAttribute('value', this.textbank['info-panel'].detail)
+    this.lowerText.setAttribute('value', textData.detail)
     this.lowerText.setAttribute('position', "0 0 0.01")
     this.lowerText.setAttribute('color', 'white')
     this.lowerText.setAttribute('align', 'center')
@@ -458,7 +467,7 @@ AFRAME.registerComponent('info-panel', {
 
     this.creditText = document.createElement('a-text');
     this.creditText.setAttribute('id', "credit-text")
-    this.creditText.setAttribute('value', this.textbank['info-panel'].credit)
+    this.creditText.setAttribute('value', textData.credit)
     this.creditText.setAttribute('position', "0 0 0.01")
     this.creditText.setAttribute('color', 'white')
     this.creditText.setAttribute('align', 'center')
@@ -474,9 +483,15 @@ AFRAME.registerComponent('info-panel', {
 
   objectListener: function(event) {
 
-    this.upperText.setAttribute('value', this.textbank[event.detail.id].title);
-    this.lowerText.setAttribute('value', this.textbank[event.detail.id].detail);
-    this.creditText.setAttribute('value', this.textbank[event.detail.id].credit);
+    var textData = this.textbank[event.detail.id]
+
+    if(!textData) {
+      textData = this.textbank[event.detail.id.replace("-desktop","")];
+    }
+
+    this.upperText.setAttribute('value', textData.title);
+    this.lowerText.setAttribute('value', textData.detail);
+    this.creditText.setAttribute('value', textData.credit);
   }
 
 });
@@ -500,8 +515,13 @@ AFRAME.registerComponent('clickable-object', {
   },
 
   clickListener: function() {
-
-    this.data.infopanel.emit('objectClicked',{'id': this.data.id.id});
+    var sceneEl = document.querySelector('a-scene');
+    if (sceneEl.is('vr-mode')) {
+      this.data.infopanel.emit('objectClicked',{'id': this.data.id.id});
+    }
+    else {
+      this.data.infopanel.emit('objectClicked',{'id': this.data.id.id + "-desktop"});
+    }
   },
 
 });

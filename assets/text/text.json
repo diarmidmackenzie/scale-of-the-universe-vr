@@ -4,6 +4,11 @@
     "detail": "Left grip will zoom in.  Right grip to zoom out.\n\nPoint and click at an object to learn more about it.\n\nLeft thumbstick to move forwards, backwards left and right.\n\nRight thumbstick to turn left or right, and move up or down.\n\nBased on a concept by Cary Huang.",
     "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
   },
+  "info-panel-desktop": {
+    "title": "Welcome to The Scale of the Universe VR",
+    "detail": "Keys: N to zoom in, M to zoom out.\n\nMouse click an object to learn more about it.\n\nWASD to move forwards, backwards left and right.\n\nQ & E to turn left or right, and Shift/Ctrl to move up or down.\n\nBased on a concept by Cary Huang.",
+    "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
+  },
   "milkyway": {
     "title": "The Milky Way",
     "detail": "The Milky Way is the galaxy that we live in.\n\nIt measures about 100,000 light year across, and is estimated to contain several hundred billion stars, of which our sun is just one.\n\nThe Milky Way is just one of an estimated two trillion galaxies within the observable universe.",
