@@ -77,8 +77,6 @@
                                                 ControlLeft=$y-minus,
                                                 KeyQ=y-rot-plus,
                                                 KeyE=y-rot-minus"
-                         thumbstick-states__right="controller:#rhand;
-                                                  bindings:y-minus,y-plus,y-rot-minus,y-rot-plus"
                          thumbstick-events__right="controller:#rhand;
                                                   bindings:y-minus,y-plus,y-rot-minus,y-rot-plus">
 
@@ -111,7 +109,9 @@
                                          #rhand.gripdown=$scaling-in,
                                          #rhand.gripup=%scaling-in,
                                          KeyN=$scaling-out,
-                                         KeyM=$scaling-in">
+                                         KeyM=$scaling-in"
+                  thumbstick-states__right="controller:#rhand;
+                                           bindings:scaling-in,scaling-out,none,none">
          <!-- Milky way image is 1m x 1m.  vs. actual diam. of 1 x 10^21 meters-->
          <a-entity id="milkyway" position="1e+21 0 0"
                    rotation = "0 -45 0"
