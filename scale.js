@@ -267,7 +267,7 @@ function formatNumber(number) {
 AFRAME.registerComponent('event-driven-movement', {
   schema: {
      moverate:   {type: 'number', default: '2'},
-     rotaterate: {type: 'number', default: '45'},
+     rotaterate: {type: 'number', default: '30'},
   },
 
   init: function() {

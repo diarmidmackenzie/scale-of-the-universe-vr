@@ -77,9 +77,9 @@
                          key-bindings="bindings:ShiftLeft=$y-plus,
                                                 ControlLeft=$y-minus,
                                                 KeyQ=y-rot-plus,
-                                                KeyE=y-rot-minus"
-                         thumbstick-events__right="controller:#rhand;
-                                                  bindings:y-minus,y-plus,y-rot-minus,y-rot-plus">
+                                                KeyE=y-rot-minus,
+                                                #lhand.gripdown=y-rot-plus,
+                                                #rhand.gripdown=y-rot-minus">
 
 
         <a-entity id="camera" camera position="0 1.6 0" look-controls>
@@ -103,13 +103,7 @@
       <a-entity position="0 1 -4">
         <a-entity id="scale-container" scalable="center:#origin"
                   key-bindings="debug:true;
-                                bindings:KeyZ=scale-out,
-                                         KeyX=scale-in,
-                                         #lhand.gripdown=$scaling-out,
-                                         #lhand.gripup=%scaling-out,
-                                         #rhand.gripdown=$scaling-in,
-                                         #rhand.gripup=%scaling-in,
-                                         KeyN=$scaling-out,
+                                bindings:KeyN=$scaling-out,
                                          KeyM=$scaling-in"
                   thumbstick-states__right="controller:#rhand;
                                            bindings:scaling-in,scaling-out,none,none">
