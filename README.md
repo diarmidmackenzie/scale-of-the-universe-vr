@@ -4,12 +4,11 @@ Experience the Scale of the Universe in VR
 - Best experience with a VR headset + controllers
 
   - tested on Oculus Quest 2; should work on other headsets too!
-
 - Can also be experienced on desktop
-
 - Not yet supported on mobile.
 
-  
+Hosted here: https://diarmidmackenzie.github.io/scale-of-the-universe-vr/
+
 
 ## Controls
 
