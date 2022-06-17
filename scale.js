@@ -258,15 +258,12 @@ function formatNumber(number) {
   return number.toString();
 }
 
-// Entity is moved based on setting/clearing states
-// y-rot-plus/minus for rotation.
+// Event-drive snap turns left & right.
+// Fire events y-rot-plus/minus for rotation.
 // Nothing else supported - could easily be extended when required.
-// Movement speed is configurable in m/s (currently unused).
 // Rotation speed is configurable in degrees/event
-
 AFRAME.registerComponent('event-driven-movement', {
-  schema: {
-     moverate:   {type: 'number', default: '2'},
+  schema: {     
      rotaterate: {type: 'number', default: '30'},
   },
 
@@ -300,12 +297,12 @@ AFRAME.registerComponent('event-driven-movement', {
 
 });
 
+/* NOT CURRENTLY USED */
 // Entity is moved based on setting/clearing states
 // x/y/z-plus/minus for position
 // x/y/z-rot-plus/minus for rotation
 // Movement speed is configurable in m/s
 // Rotation speed is configurable in degrees/s
-
 AFRAME.registerComponent('state-driven-movement', {
   schema: {
      moverate:   {type: 'number', default: '2'},
@@ -773,3 +770,100 @@ init: function () {
   el.setObject3D('mesh', this.mesh);
 }
 });
+
+const GLOBAL_DATA = {
+  tempMatrix: new THREE.Matrix4(),
+  tempQuaternion: new THREE.Quaternion(),
+}
+
+// Change the parent of an object without changing its transform.
+AFRAME.registerComponent('object-parent', {
+
+  schema: {
+    parent:     {type: 'selector'},    
+  },
+
+  update() {
+    const object = this.el.object3D
+    const oldParent = object.parent
+    const newParent = this.data.parent.object3D
+
+    if (object.parent === newParent) {
+      return;
+    }
+
+    console.log(`Reparenting ${object.el.id} from ${oldParent.el ? oldParent.el.id : "unknown"} to ${newParent.el ? newParent.el.id : "unknown"}`);
+  
+    // make sure all matrices are up to date before we do anything.
+    // this may be overkill, but ooptimizing for reliability over performance.
+    oldParent.updateMatrixWorld();
+    oldParent.updateMatrix();
+    object.updateMatrix();
+    newParent.updateMatrixWorld();
+    newParent.updateMatrix();
+  
+    // Now update the object's matrix to the new frame of reference.
+    GLOBAL_DATA.tempMatrix.copy(newParent.matrixWorld).invert();
+    object.matrix.premultiply(oldParent.matrixWorld);
+    object.matrix.premultiply(GLOBAL_DATA.tempMatrix);
+    object.matrix.decompose(object.position, object.quaternion, object.scale);
+    object.matrixWorldNeedsUpdate = true;
+
+    // finally, change the object's parent.
+    newParent.add(object);
+  }
+});
+
+// Add this to the relevant controller
+AFRAME.registerComponent('laser-manipulation', {
+
+  schema: {
+
+    defaultParent: {type: 'selector', }
+  },
+
+  init() {
+    // controller must have an ID so that
+    console.assert(this.el.id)
+
+    // set up listeners
+    this.triggerUp = this.triggerUp.bind(this)
+    this.triggerDown = this.triggerDown.bind(this)
+    this.el.addEventListener('triggerup', this.triggerUp)
+    this.el.addEventListener('triggerdown', this.triggerDown)
+
+    // variable to track any grabbed element
+    this.grabbedEl = null;
+  },
+
+  triggerDown(evt) {
+
+    console.assert(!this.grabbedEl)
+
+    const intersections = this.getIntersections(evt.target);
+
+    if (intersections.length === 0)  return;
+
+    const element = intersections[0]
+
+    // reparent element to this controller.
+    element.setAttribute('object-parent', 'parent', `#${this.el.id}`)
+    this.grabbedEl = element
+  },
+
+  triggerUp() {
+
+    if (!this.grabbedEl) return
+
+    this.grabbedEl.setAttribute('object-parent', 'parent', `#${this.data.defaultParent.id}`)
+    this.grabbedEl = null
+  },
+
+  getIntersections(controllerEl) {
+
+    const els = controllerEl.components.raycaster.intersectedEls
+    return els
+  },
+
+});
+

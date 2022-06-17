@@ -1,12 +1,12 @@
 {
   "info-panel": {
     "title": "Welcome to The Scale of the Universe VR",
-    "detail": "Right thumbstick forward/back to zoom in/out.\n\nPoint and click at an object to learn more about it.\n\nLeft thumbstick to move around.\n\nUse grips to snap-turn left and right.\n\nBased on a concept by Cary Huang.",
+    "detail": "Right thumbstick forward/back to zoom in/out.\n\nPoint and click at an object to learn more about it.\n\nUse grips to snap-turn left and right.\n\nBased on a concept by Cary Huang.",
     "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
   },
   "info-panel-desktop": {
     "title": "Welcome to The Scale of the Universe VR",
-    "detail": "Keys: N to zoom in, M to zoom out.\n\nMouse click an object to learn more about it.\n\nWASD to move forwards, backwards left and right\n(look up and press W to move upwards).\n\nQ & E to turn left or right.\n\nBased on a concept by Cary Huang.",
+    "detail": "Keys: N to zoom in, M to zoom out.\n\nHold down the mouse button and drag to look around\n\nMouse click an object to learn more about it.\n\nQ & E to turn left or right.\n\nBased on a concept by Cary Huang.",
     "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
   },
   "milkyway": {

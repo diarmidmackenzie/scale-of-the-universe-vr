@@ -72,11 +72,9 @@
         </a-asset-item>
       </a-assets>
 
-      <a-entity id="rig" movement-controls="fly:true"
-                         event-driven-movement
-                         key-bindings="bindings:ShiftLeft=$y-plus,
-                                                ControlLeft=$y-minus,
-                                                KeyQ=y-rot-plus,
+      <!-- only supported movement is snap turns left / right (for desktop & seated VR)-->
+      <a-entity id="rig" event-driven-movement
+                         key-bindings="bindings:KeyQ=y-rot-plus,
                                                 KeyE=y-rot-minus,
                                                 #lhand.gripdown=y-rot-plus,
                                                 #rhand.gripdown=y-rot-minus">
@@ -92,6 +90,7 @@
         </a-entity>
         <a-entity id="rhand"
                   laser-controls="hand: right" raycaster="objects: .clickable-object; lineColor: red; lineOpacity: 0.5"
+                  laser-manipulation="defaultParent: #scale-container"
                   hand-controls="hand: right">
         </a-entity>
         <a-entity id="lhand"
