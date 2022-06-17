@@ -1,7 +1,7 @@
 {
   "info-panel": {
     "title": "Welcome to The Scale of the Universe VR",
-    "detail": "Right thumbstick forward/back to zoom in/out.\n\nPoint and click at an object to learn more about it.\n\nUse grips to snap-turn left and right.\n\nBased on a concept by Cary Huang.",
+    "detail": "Left thumbstick forward/back to zoom in/out.\n\nPoint and click at an object to learn more about it, or move it.\n\nUse grips to snap-turn left and right.\n\nBased on a concept by Cary Huang.",
     "credit" : "https://github.com/diarmidmackenzie/scale-of-the-universe-vr"
   },
   "info-panel-desktop": {
