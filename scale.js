@@ -1,9 +1,6 @@
 AFRAME.registerComponent('scalable', {
-  schema: {
-    // I haven't really understood this.
-    // Centering on origin works fine.  Centering on camera doesn't work.
-    // !! Need to look at the code & logic again and simplify/correct this.
-    center:   {type: 'selector', default: "#camera"},
+  schema: {    
+    grabController:   {type: 'selector', default: "#rhand"},
   },
 
   init: function() {
@@ -13,7 +10,7 @@ AFRAME.registerComponent('scalable', {
     this.scaleSpeed = 10;
 
     // vector used for calculating re-centering
-    this.vectorFromCenter = new THREE.Vector3();
+    this.recenteringVector = new THREE.Vector3();
 
     // vector used for calculating object scales
     this.checkScale = new THREE.Vector3();
@@ -29,7 +26,6 @@ AFRAME.registerComponent('scalable', {
   },
 
   update: function () {
-    this.center = this.data.center;
     this.adjustChildrenVisibility();
   },
 
@@ -48,13 +44,8 @@ AFRAME.registerComponent('scalable', {
 
     const scalar = Math.pow(this.scaleSpeed, timeDelta/1000);
     this.el.object3D.scale.multiplyScalar(scalar);
+    this.scaleGrabbedElement(scalar)
 
-    // adjust center.
-    this.vectorFromCenter.subVectors(this.el.object3D.position,
-                                   this.center.object3D.position);
-    this.vectorFromCenter.multiplyScalar(scalar);
-    this.el.object3D.position.addVectors(this.center.object3D.position,
-                                         this.vectorFromCenter);
     this.adjustChildrenVisibility();
   },
 
@@ -63,12 +54,9 @@ AFRAME.registerComponent('scalable', {
     const scalar = Math.pow(this.scaleSpeed, timeDelta/1000);
     this.el.object3D.scale.divideScalar(scalar);
 
-    // adjust center.
-    this.vectorFromCenter.subVectors(this.el.object3D.position,
-                                   this.center.object3D.position);
-    this.vectorFromCenter.divideScalar(scalar);
-    this.el.object3D.position.addVectors(this.center.object3D.position,
-                                         this.vectorFromCenter);
+    // also scale any element that is grabbed (parented by controller)
+    this.scaleGrabbedElement(1 / scalar)
+
     this.adjustChildrenVisibility();
   },
 
@@ -97,6 +85,17 @@ AFRAME.registerComponent('scalable', {
     }
   },
 
+  scaleGrabbedElement: function(factor) {
+
+    const grabbedEl = this.data.grabController.components['laser-manipulation'].grabbedEl
+    
+
+    if (grabbedEl) {
+      // scale grabbed element about the grabbed point.
+      const contactPoint = this.data.grabController.components['laser-manipulation'].contactPoint
+      contactPoint.object3D.scale.multiplyScalar(factor);      
+    }
+  },
 
   tick: function(time, timeDelta) {
 
@@ -834,6 +833,12 @@ AFRAME.registerComponent('laser-manipulation', {
 
     // variable to track any grabbed element
     this.grabbedEl = null;
+
+    // child object used as container for any entity that can be grabbed.
+    // (this helps with scaling, rotation etc. of grabbed entity)
+    this.contactPoint = document.createElement('a-entity')
+    this.contactPoint.setAttribute('id', `${this.el.id}-contact-point`)
+    this.el.appendChild(this.contactPoint)
   },
 
   triggerDown(evt) {
@@ -846,9 +851,13 @@ AFRAME.registerComponent('laser-manipulation', {
 
     const element = intersections[0]
 
+    const intersectionData = this.el.components.raycaster.getIntersection(element)
+
     // reparent element to this controller.
-    element.setAttribute('object-parent', 'parent', `#${this.el.id}`)
     this.grabbedEl = element
+    const grabbedPoint = this.el  .object3D.worldToLocal(intersectionData.point)
+    this.contactPoint.object3D.position.copy(grabbedPoint)
+    element.setAttribute('object-parent', 'parent', `#${this.el.id}-contact-point`)
   },
 
   triggerUp() {
