@@ -263,7 +263,7 @@ function formatNumber(number) {
 // Rotation speed is configurable in degrees/event
 AFRAME.registerComponent('event-driven-movement', {
   schema: {     
-     rotaterate: {type: 'number', default: '30'},
+     rotateRate: {type: 'number', default: '30'},
   },
 
   init: function() {
@@ -276,7 +276,7 @@ AFRAME.registerComponent('event-driven-movement', {
   update: function() {
 
     // internally store rotation rate as radians per event
-    this.rotateRate = this.data.rotaterate * Math.PI / 180;
+    this.rotateRate = this.data.rotateRate * Math.PI / 180;
 
     this.el.addEventListener('y-rot-plus',
                              this.listeners.yRotPlus,
@@ -818,18 +818,41 @@ AFRAME.registerComponent('laser-manipulation', {
 
   schema: {
 
-    defaultParent: {type: 'selector', }
+    defaultParent: {type: 'selector'},
+    rotateRate: {type: 'number', default: '1'},
+  },
+
+  update: function() {
+
+    // internally store rotation rate as radians per event
+    this.rotateRate = this.data.rotateRate * Math.PI / 180;
   },
 
   init() {
     // controller must have an ID so that
     console.assert(this.el.id)
 
+    // This is a rate per second.  We scale distance by this factor per second.
+    // Take a root of this to get a scaling factor.
+    this.moveSpeed = 2;
+
     // set up listeners
     this.triggerUp = this.triggerUp.bind(this)
     this.triggerDown = this.triggerDown.bind(this)
+    this.yRotPlus = this.yRotPlus.bind(this)
+    this.yRotMinus = this.yRotMinus.bind(this)
+    this.xRotPlus = this.xRotPlus.bind(this)
+    this.xRotMinus = this.xRotMinus.bind(this)
+    this.moveToward = this.moveToward.bind(this)
+    this.moveAway = this.moveAway.bind(this)
     this.el.addEventListener('triggerup', this.triggerUp)
     this.el.addEventListener('triggerdown', this.triggerDown)
+    this.el.addEventListener('y-rotate-entity-plus', this.yRotPlus)
+    this.el.addEventListener('y-rotate-entity-minus', this.yRotMinus)
+    this.el.addEventListener('x-rotate-entity-plus', this.xRotPlus)
+    this.el.addEventListener('x-rotate-entity-minus', this.xRotMinus)
+    this.el.addEventListener('move-toward', this.moveToward)
+    this.el.addEventListener('move-away', this.moveAway)
 
     // variable to track any grabbed element
     this.grabbedEl = null;
@@ -872,6 +895,38 @@ AFRAME.registerComponent('laser-manipulation', {
 
     const els = controllerEl.components.raycaster.intersectedEls
     return els
+  },
+
+  yRotPlus() {
+    this.contactPoint.object3D.rotation.y += this.rotateRate;
+  },
+
+  yRotMinus() {
+    this.contactPoint.object3D.rotation.y -= this.rotateRate;
+  },
+
+  xRotPlus() {
+    this.contactPoint.object3D.rotation.x += this.rotateRate;
+  },
+
+  xRotMinus() {
+    this.contactPoint.object3D.rotation.x -= this.rotateRate;
+  },
+
+  moveToward() {
+    // move Toward event treated as 100 msecs of moving towards state.
+    this.moveOut(-100)
+  },
+
+  moveAway() {
+    // move away event treated as 100 msecs of moving towards state.
+    this.moveOut(100)
+  },
+
+  // Implements moving out or in (in = -ve)
+  moveOut(timeDelta) {
+    const scalar = Math.pow(this.moveSpeed, timeDelta/1000);
+    this.contactPoint.object3D.position.multiplyScalar(scalar)
   },
 
 });
