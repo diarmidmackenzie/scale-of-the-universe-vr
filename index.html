@@ -75,9 +75,9 @@
       <!-- only supported movement is snap turns left / right (for desktop & seated VR)-->
       <a-entity id="rig" event-driven-movement
                          key-bindings="bindings:KeyQ=y-rot-plus,
-                                                KeyE=y-rot-minus,
-                                                #lhand.gripdown=y-rot-plus,
-                                                #rhand.gripdown=y-rot-minus">
+                                                KeyE=y-rot-minus"
+                         thumbstick-events__left="controller:#lhand;
+                                                  bindings:none,none,y-rot-minus, y-rot-plus">
 
         <a-entity id="camera" camera position="0 1.6 0" look-controls>
         </a-entity>
