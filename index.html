@@ -10,7 +10,7 @@
   <body>
     <a-scene renderer="colorManagement:true" stats
              cursor="rayOrigin: mouse; fuse: false"
-             raycaster="objects: .clickable-object"
+             raycaster="objects: .clickable-object; far: Infinity"
              background="color:black">
       <a-assets>
         <a-asset-item id="text" src="./assets/text/text.json">
@@ -70,6 +70,10 @@
            src="./assets/sun/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
+        <a-mixin id="grid-mixin"
+            geometry="primitive: sphere; radius: 0.5" 
+            material="opacity: 0.03; color: #ffffff">
+        </a-mixin>
       </a-assets>
 
       <!-- only supported movement is snap turns left / right (for desktop & seated VR)-->
@@ -79,7 +83,7 @@
                          thumbstick-events__left="controller:#lhand;
                                                   bindings:none,none,y-rot-minus, y-rot-plus">
 
-        <a-entity id="camera" camera position="0 1.6 0" look-controls>
+        <a-entity id="camera" camera="far:100000" position="0 1.6 0" look-controls>
         </a-entity>
         <a-entity id="scale" position="0 1.05 -0.85" rotation = "-45 0 0" scale-ruler="target:#scale-container">
         </a-entity>
@@ -88,7 +92,7 @@
                   clickable-object="id:#info-panel">
         </a-entity>
         <a-entity id="rhand"
-                  laser-controls="hand: right" raycaster="objects: .clickable-object; lineColor: red; lineOpacity: 0.5"
+                  laser-controls="hand: right" raycaster="objects: .clickable-object; far: Infinity; lineColor: red; lineOpacity: 0.5"
                   laser-manipulation="defaultParent: #scale-container"
                   thumbstick-states__right="controller:#rhand;
                                             bindings:moving-in,moving-out,rotating-y-plus,rotating-y-minus"
@@ -97,11 +101,9 @@
         <a-entity id="lhand"
                   oculus-touch-controls="hand: left">
         </a-entity>
-      </a-entity>
-      <a-entity id="origin">
-      </a-entity>
+      </a-entity>      
       <a-entity position="0 1 -4">
-        <a-entity id="scale-container" scalable="center:#origin"
+        <a-entity id="scale-container" scalable
                   key-bindings="debug:true;
                                 bindings:KeyN=$scaling-out,
                                          KeyM=$scaling-in"
@@ -205,6 +207,31 @@
                     gltf-model="#glucose-model"
                     scale="0.000000000005 0.000000000005 0.000000000005">
           </a-entity>
+
+          <!-- to be replaced with some code to generate + use an instanced mesh -->
+          <a-entity mixin='grid-mixin' scale = "10e-9 10e-9 10e-9"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-8 10e-8 10e-8"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-7 10e-7 10e-7"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-6 10e-6 10e-6"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-5 10e-5 10e-5 "></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-4 10e-4 10e-4 "></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-3 10e-3 10e-3"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-2 10e-2 10e-2"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-1 10e-1 10e-1"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e-0 10e-0 10e-0"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+1 10e+1 10e+1"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+2 10e+2 10e+2"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+3 10e+3 10e+3"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+4 10e+4 10e+4"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+5 10e+5 10e+5"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+6 10e+6 10e+6"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+7 10e+7 10e+7"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+8 10e+8 10e+8"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+9 10e+9 10e+9"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+10 10e+10 10e+10"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+11 10e+11 10e+11"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+12 10e+12 10e+12"></a-entity>
+          <a-entity mixin='grid-mixin' scale = "10e+13 10e+13 10e+13"></a-entity>
         </a-entity>
       </a-entity>
     </a-scene>
