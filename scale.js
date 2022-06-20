@@ -819,7 +819,7 @@ AFRAME.registerComponent('laser-manipulation', {
   schema: {
 
     defaultParent: {type: 'selector'},
-    rotateRate: {type: 'number', default: '1'},
+    rotateRate: {type: 'number', default: '45'},
   },
 
   update: function() {
@@ -834,25 +834,13 @@ AFRAME.registerComponent('laser-manipulation', {
 
     // This is a rate per second.  We scale distance by this factor per second.
     // Take a root of this to get a scaling factor.
-    this.moveSpeed = 2;
+    this.moveSpeed = 3;
 
     // set up listeners
     this.triggerUp = this.triggerUp.bind(this)
     this.triggerDown = this.triggerDown.bind(this)
-    this.yRotPlus = this.yRotPlus.bind(this)
-    this.yRotMinus = this.yRotMinus.bind(this)
-    this.xRotPlus = this.xRotPlus.bind(this)
-    this.xRotMinus = this.xRotMinus.bind(this)
-    this.moveToward = this.moveToward.bind(this)
-    this.moveAway = this.moveAway.bind(this)
     this.el.addEventListener('triggerup', this.triggerUp)
     this.el.addEventListener('triggerdown', this.triggerDown)
-    this.el.addEventListener('y-rotate-entity-plus', this.yRotPlus)
-    this.el.addEventListener('y-rotate-entity-minus', this.yRotMinus)
-    this.el.addEventListener('x-rotate-entity-plus', this.xRotPlus)
-    this.el.addEventListener('x-rotate-entity-minus', this.xRotMinus)
-    this.el.addEventListener('move-toward', this.moveToward)
-    this.el.addEventListener('move-away', this.moveAway)
 
     // variable to track any grabbed element
     this.grabbedEl = null;
@@ -897,37 +885,28 @@ AFRAME.registerComponent('laser-manipulation', {
     return els
   },
 
-  yRotPlus() {
-    this.contactPoint.object3D.rotation.y += this.rotateRate;
-  },
-
-  yRotMinus() {
-    this.contactPoint.object3D.rotation.y -= this.rotateRate;
-  },
-
-  xRotPlus() {
-    this.contactPoint.object3D.rotation.x += this.rotateRate;
-  },
-
-  xRotMinus() {
-    this.contactPoint.object3D.rotation.x -= this.rotateRate;
-  },
-
-  moveToward() {
-    // move Toward event treated as 100 msecs of moving towards state.
-    this.moveOut(-100)
-  },
-
-  moveAway() {
-    // move away event treated as 100 msecs of moving towards state.
-    this.moveOut(100)
-  },
-
   // Implements moving out or in (in = -ve)
   moveOut(timeDelta) {
     const scalar = Math.pow(this.moveSpeed, timeDelta/1000);
     this.contactPoint.object3D.position.multiplyScalar(scalar)
   },
 
+  
+  tick: function(time, timeDelta) {
+    
+    if (this.el.is("moving-in")) {
+      this.moveOut(-timeDelta);
+    }
+    else if (this.el.is("moving-out")) {
+      this.moveOut(timeDelta);
+    }
+
+    if (this.el.is("rotating-y-plus")) {
+      this.contactPoint.object3D.rotation.y += timeDelta * this.rotateRate / 1000;
+    }
+    else if (this.el.is("rotating-y-minus")) {
+      this.contactPoint.object3D.rotation.y -= timeDelta * this.rotateRate / 1000;
+    }
+  }
 });
 

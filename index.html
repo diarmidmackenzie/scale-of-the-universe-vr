@@ -90,8 +90,8 @@
         <a-entity id="rhand"
                   laser-controls="hand: right" raycaster="objects: .clickable-object; lineColor: red; lineOpacity: 0.5"
                   laser-manipulation="defaultParent: #scale-container"
-                  thumbstick-events__right="controller:#rhand;
-                                            bindings:move-toward,move-away,y-rotate-entity-minus,y-rotate-entity-plus,"
+                  thumbstick-states__right="controller:#rhand;
+                                            bindings:moving-in,moving-out,rotating-y-plus,rotating-y-minus"
                   hand-controls="hand: right">
         </a-entity>
         <a-entity id="lhand"
