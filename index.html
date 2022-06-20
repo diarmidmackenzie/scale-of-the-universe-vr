@@ -18,55 +18,55 @@
         <!-- Assets ordered in order likely to be encountered.
              human scale objects first, then moving to extremes in
              each direction-->
-        <a-asset-item id="trex"
+        <a-asset-item id="trex-model"
            src="./assets/t-rex/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="chicken"
+        <a-asset-item id="chicken-model"
            src="./assets/chicken/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="eiffel"
+        <a-asset-item id="eiffel-model"
            src="./assets/eiffel/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="ant"
+        <a-asset-item id="ant-model"
            src="./assets/ant/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="elcapitan"
+        <a-asset-item id="elcapitan-model"
            src="./assets/el-capitan/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="cell"
+        <a-asset-item id="cell-model"
            src="./assets/cell/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="deimos"
+        <a-asset-item id="deimos-model"
            src="./assets/deimos/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="virus"
+        <a-asset-item id="virus-model"
            src="./assets/virus/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="moon"
+        <a-asset-item id="moon-model"
            src="./assets/moon/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="glucose"
+        <a-asset-item id="glucose-model"
            src="./assets/glucose/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="earth"
+        <a-asset-item id="earth-model"
            src="./assets/earth/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="jupiter"
+        <a-asset-item id="jupiter-model"
            src="./assets/jupiter/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
-        <a-asset-item id="sun"
+        <a-asset-item id="sun-model"
            src="./assets/sun/scene.gltf"
            response-type="arraybuffer" crossorigin="anonymous">
         </a-asset-item>
@@ -133,30 +133,30 @@
          </a-entity>
          <!-- Sun model is 21m vs. actual diam. of 1.39M km-->
          <a-entity id="sun" position="-2e+9 0 0"
-                   gltf-model="#sun"
+                   gltf-model="#sun-model"
                    clickable-object="id:#sun"
                    scale="6.62e+7 6.62e+7 6.62e+7">
          </a-entity>
          <!-- Jupiter model is 2.13m vs. actual diam. of 1.39M km-->
          <a-entity id="jupiter" position="4e+8 0 0"
-                   gltf-model="#jupiter"
+                   gltf-model="#jupiter-model"
                    clickable-object="id:#jupiter"
                    scale="6.56e+7 6.56e+7 6.56e+7">
          </a-entity>
          <!-- Earth model is 8470m vs. actual diam. of 12742 km-->
           <a-entity id="earth" position="16000000 0 0"
-                    gltf-model="#earth"
+                    gltf-model="#earth-model"
                     clickable-object="id:#earth"
                     scale="1500 1500 1500">
           </a-entity>
           <!-- Moon model is 209m vs. actual diam. of 3475 km-->
           <a-entity id="moon" position="-4000000 0 0"
-                    gltf-model="#moon"
+                    gltf-model="#moon-model"
                     clickable-object="id:#moon"
                     scale="16600 16600 16600">
           </a-entity>
           <a-entity id="deimos" position="-1000 0 -10000"
-                    gltf-model="#deimos"
+                    gltf-model="#deimos-model"
                     clickable-object="id:#deimos"
                     scale="10 10 10">
           </a-entity>
@@ -164,45 +164,45 @@
           <a-entity id="elcapitan" position="-2000 450 1000"
                     clickable-object="id:#elcapitan"
                     rotation="0 45 0"
-                    gltf-model="#elcapitan"
+                    gltf-model="#elcapitan-model"
                     scale="200 200 200">
           </a-entity>
           <!-- Model height is 114m from top of dome to base vs. actual height of 300m-->
           <a-entity id="eiffel" position="100 -2 0"
                     clickable-object="id:#eiffel"
                     rotation="0 0 0"
-                    gltf-model="#eiffel"
+                    gltf-model="#eiffel-model"
                     scale="2.63 2.63 2.63">
           </a-entity>
           <a-entity id="trex" position="-3 -1 0"
                     clickable-object="id:#trex"
-                    gltf-model="#trex"
+                    gltf-model="#trex-model"
                     scale="0.06 0.06 0.06">
           </a-entity>
           <a-entity id="chicken" position="1 0 0"
                     clickable-object="id:#chicken"
-                    gltf-model="#chicken"
+                    gltf-model="#chicken-model"
                     scale="0.4 0.4 0.4">
           </a-entity>
           <a-entity id="ant" position="0.01 0 0"
                     clickable-object="id:#ant"
-                    gltf-model="#ant"
+                    gltf-model="#ant-model"
                     rotation="0 90 0"
                     scale="0.002 0.002 0.002">
           </a-entity>
           <a-entity id="cell" position="-0.000025 0 0"
                     clickable-object="id:#cell"
-                    gltf-model="#cell"
+                    gltf-model="#cell-model"
                     scale="0.0000025 0.0000025 0.0000025">
           </a-entity>
           <a-entity id="virus" position="0.0000003 0 0"
                     clickable-object="id:#virus"
-                    gltf-model="#virus"
+                    gltf-model="#virus-model"
                     scale="0.000000001 0.000000001 0.000000001">
           </a-entity>
           <a-entity id="glucose" position="-0.000000002 0 0"
                     clickable-object="id:#glucose"
-                    gltf-model="#glucose"
+                    gltf-model="#glucose-model"
                     scale="0.000000000005 0.000000000005 0.000000000005">
           </a-entity>
         </a-entity>

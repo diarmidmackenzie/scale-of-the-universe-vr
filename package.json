@@ -1,0 +1,26 @@
+{
+  "name": "scale-of-the-universe-vr",
+  "version": "0.1.0",
+  "description": "Educational VR experience showing the universe from the very small to the very large",
+  "main": "scale.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "aframe-e2e-testing": "file:aframe-e2e-testing"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diarmidmackenzie/scale-of-the-universe-vr.git"
+  },
+  "author": "Diarmid Mackenzie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diarmidmackenzie/scale-of-the-universe-vr/issues"
+  },
+  "homepage": "https://github.com/diarmidmackenzie/scale-of-the-universe-vr#readme"
+}

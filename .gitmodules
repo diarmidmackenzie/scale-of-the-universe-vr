@@ -1,0 +1,4 @@
+[submodule "aframe-e2e-testing"]
+	path = aframe-e2e-testing
+	url = https://github.com/diarmidmackenzie/aframe-e2e-testing
+	branch = scale-of-universe
