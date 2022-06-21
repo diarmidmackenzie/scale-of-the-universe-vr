@@ -381,34 +381,113 @@ AFRAME.registerComponent('state-driven-movement', {
 AFRAME.registerComponent('thumbstick-states', {
   schema: {
      controller:   {type: 'selector', default: "#lhand"},
-     bindings:     {type: 'array', default: "z-minus,z-plus,x-minus,x-plus"},
+     bindings:     {type: 'array', default: ["none", "none", "none", "none"]},
+     tBindings:    {type: 'array', default: []},
+     gBindings:    {type: 'array', default: []},
+     tgBindings:   {type: 'array', default: []},
      sensitivity:  {type: 'number', default: 0.5}
   },
 
   multiple: true,
 
-  init: function() {
+  init() {
     this.controller = this.data.controller;
 
     this.listeners = {
       thumbstickMoved: this.thumbstickMoved.bind(this),
+      triggerUp: this.triggerUp.bind(this),
+      triggerDown: this.triggerDown.bind(this),
+      gripUp: this.gripUp.bind(this),
+      gripDown: this.gripDown.bind(this),
     }
+
+    this.states = {
+      gripDown: false,
+      triggerDown: false,
+    }
+
   },
 
-  update: function() {
-
-    this.yplus = this.data.bindings[0]
-    this.yminus = this.data.bindings[1]
-    this.xplus = this.data.bindings[2]
-    this.xminus = this.data.bindings[3]
+  update() {
 
     this.controller.addEventListener('thumbstickmoved',
-                                     this.listeners.thumbstickMoved,
-                                     false);
+                                     this.listeners.thumbstickMoved);
+    this.controller.addEventListener('triggerup',
+                                     this.listeners.triggerUp);
+    this.controller.addEventListener('triggerdown',
+                                     this.listeners.triggerDown);
+    this.controller.addEventListener('gripup',
+                                     this.listeners.gripUp);
+    this.controller.addEventListener('gripdown',
+                                     this.listeners.gripDown);
+
+    this.updateBindings()
 
   },
 
-  thumbstickMoved: function(event) {
+  updateBindings() {
+
+    // clear all pre-existing state
+    const removeStates = (set) => set.forEach((item) => this.el.removeState(item) )
+    removeStates(this.data.bindings)
+    removeStates(this.data.tBindings)
+    removeStates(this.data.gBindings)
+    removeStates(this.data.tgBindings)
+
+    // now update bindings
+    var binding;
+
+    if (!this.states.triggerDown && !this.states.gripDown) {
+      binding = (x) => this.data.bindings[x]      
+    }
+    else if (this.states.triggerDown && !this.states.gripDown) {
+      // trigger down.  If tBinding not specified, fall back to regular bindings
+      binding = (x) => this.data.tBindings[x] ||
+                       this.data.bindings[x]
+    }
+    else if (!this.states.triggerDown && this.states.gripDown) {
+      // grip down.  If gBinding not specified, fall back to regular bindings
+      binding = (x) => this.data.gBindings[x] ||
+                       this.data.bindings[x]
+    }
+    else {
+      // trigger and grip down.  If tgBinding not specified, fall back to t, g, or regular bindings
+      binding = (x) => this.data.tgBindings[x] ||
+                       this.data.gBindings[x] ||
+                       this.data.tBindings[x] ||
+                       this.data.bindings[x]
+    }
+
+    this.yplus = binding(0)
+    this.yminus = binding(1)
+    this.xplus = binding(2)
+    this.xminus = binding(3)
+
+    console.log(this)
+  },
+
+  gripDown(event) {
+
+    this.states.gripDown = true;
+    this.updateBindings()
+  },
+
+  gripUp(event) {
+    this.states.gripDown = false;
+    this.updateBindings()
+  },
+
+  triggerDown(event) {
+    this.states.triggerDown = true;
+    this.updateBindings()
+  },
+
+  triggerUp(event) {
+    this.states.triggerDown = false;
+    this.updateBindings()
+  },
+
+  thumbstickMoved(event) {
 
     const x = event.detail.x
     const y = event.detail.y
@@ -452,7 +531,10 @@ AFRAME.registerComponent('thumbstick-states', {
 AFRAME.registerComponent('thumbstick-events', {
   schema: {
      controller:   {type: 'selector', default: "#lhand"},
-     bindings:     {type: 'array', default: "z-minus,z-plus,x-minus,x-plus"},
+     bindings:     {type: 'array', default: ["none", "none", "none", "none"]},
+     tBindings:    {type: 'array', default: []},
+     gBindings:    {type: 'array', default: []},
+     tgBindings:    {type: 'array', default: []},
      sensitivity:  {type: 'number', default: 0.5},
      cooldown:      {type: 'number', default: 500}
   },
@@ -464,15 +546,20 @@ AFRAME.registerComponent('thumbstick-events', {
 
     this.listeners = {
       thumbstickMoved: this.thumbstickMoved.bind(this),
+      triggerUp: this.triggerUp.bind(this),
+      triggerDown: this.triggerDown.bind(this),
+      gripUp: this.gripUp.bind(this),
+      gripDown: this.gripDown.bind(this),
+    }
+
+    this.states = {
+      gripDown: false,
+      triggerDown: false,
     }
   },
 
   update: function() {
 
-    this.yplus = this.data.bindings[0]
-    this.yminus = this.data.bindings[1]
-    this.xplus = this.data.bindings[2]
-    this.xminus = this.data.bindings[3]
     this.yplusBlocked = false;
     this.yminusBlocked = false;
     this.xplusBlocked = false;
@@ -481,7 +568,71 @@ AFRAME.registerComponent('thumbstick-events', {
     this.controller.addEventListener('thumbstickmoved',
                                      this.listeners.thumbstickMoved,
                                      false);
+    this.controller.addEventListener('triggerup',
+                                     this.listeners.triggerUp);
+    this.controller.addEventListener('triggerdown',
+                                     this.listeners.triggerDown);
+    this.controller.addEventListener('gripup',
+                                     this.listeners.gripUp);
+    this.controller.addEventListener('gripdown',
+                                     this.listeners.gripDown);
+    this.updateBindings()
 
+  },
+
+  
+  updateBindings() {
+
+    var binding;
+
+    if (!this.states.triggerDown && !this.states.gripDown) {
+      binding = (x) => this.data.bindings[x]      
+    }
+    else if (this.states.triggerDown && !this.states.gripDown) {
+      // trigger down.  If tBinding not specified, fall back to regular bindings
+      binding = (x) => this.data.tBindings[x] ||
+                       this.data.bindings[x]
+    }
+    else if (!this.states.triggerDown && this.states.gripDown) {
+      // grip down.  If gBinding not specified, fall back to regular bindings
+      binding = (x) => this.data.gBindings[x] ||
+                       this.data.bindings[x]
+    }
+    else {
+      // trigger and grip down.  If tgBinding not specified, fall back to t, g, or regular bindings
+      binding = (x) => this.data.tgBindings[x] ||
+                       this.data.gBindings[x] ||
+                       this.data.tBindings[x] ||
+                       this.data.bindings[x]
+    }
+
+    this.yplus = binding(0)
+    this.yminus = binding(1)
+    this.xplus = binding(2)
+    this.xminus = binding(3)
+
+    console.log(this)
+  },
+
+  gripDown(event) {
+
+    this.states.gripDown = true;
+    this.updateBindings()
+  },
+
+  gripUp(event) {
+    this.states.gripDown = false;
+    this.updateBindings()
+  },
+
+  triggerDown(event) {
+    this.states.triggerDown = true;
+    this.updateBindings()
+  },
+
+  triggerUp(event) {
+    this.states.triggerDown = false;
+    this.updateBindings()
   },
 
   thumbstickMoved: function(event) {

@@ -83,7 +83,8 @@
                          key-bindings="bindings:KeyQ=y-rot-plus,
                                                 KeyE=y-rot-minus"
                          thumbstick-events__left="controller:#lhand;
-                                                  bindings:none,none,y-rot-minus, y-rot-plus">
+                                                  bindings:none,none,y-rot-minus, y-rot-plus;
+                                                  gBindings:none,none,none,none">
 
         <a-entity id="camera" camera="far:100000" position="0 1.6 0" look-controls>
         </a-entity>
@@ -97,7 +98,7 @@
                   laser-controls="hand: right" raycaster="objects: .clickable-object; far: Infinity; lineColor: red; lineOpacity: 0.5"
                   laser-manipulation="defaultParent: #scale-container"
                   thumbstick-states__right="controller:#rhand;
-                                            bindings:moving-in,moving-out,rotating-y-plus,rotating-y-minus"
+                                            tBindings:moving-in,moving-out,rotating-y-plus,rotating-y-minus"
                   oculus-touch-controls="hand: right">
         </a-entity>
         <a-entity id="lhand"
@@ -110,7 +111,9 @@
                                 bindings:KeyN=$scaling-out,
                                          KeyM=$scaling-in"
                   thumbstick-states__left="controller:#lhand;
-                                           bindings:scaling-in,scaling-out,none,none">
+                                           gBindings:scaling-in,scaling-out,none,none"
+                  thumbstick-states__right="controller:#rhand;
+                                            gBindings:scaling-in,scaling-out,none,none">
          <!-- Milky way image is 1m x 1m.  vs. actual diam. of 1 x 10^21 meters-->
          <a-entity id="milkyway" position="1e+21 0 0"
                    rotation = "0 -45 0"
