@@ -5,13 +5,15 @@
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/key-bindings@v0.3-alpha/key-bindings.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/6dof-object-control@v0.5-alpha/src/thumbstick-object-control.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kylebakerio/vr-super-stats@1.5.0/vr-super-stats.js"></script>
     <script src="./scale.js"></script>
   </head>
   <body>
     <a-scene renderer="colorManagement:true" stats
              cursor="rayOrigin: mouse; fuse: false"
              raycaster="objects: .clickable-object; far: Infinity"
-             background="color:black">
+             background="color:black"
+             vr-super-stats>
       <a-assets>
         <a-asset-item id="text" src="./assets/text/text.json">
         </a-asset-item>

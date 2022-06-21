@@ -73,14 +73,19 @@ AFRAME.registerComponent('scalable', {
   adjustChildrenVisibility: function () {
 
     for (child of this.el.children) {
+
       child.object3D.getWorldScale(this.checkScale)
 
-      if (this.checkScale.x < 0.000001) {
+      if (!child.id ||
+          (this.checkScale.x < 0.0001) ||
+          (this.checkScale.x > 100000)) {
         child.object3D.visible = false;
+        child.setAttribute('clickable-object', 'disabled:true')
       }
       else
       {
         child.object3D.visible = true;
+        child.setAttribute('clickable-object', 'disabled:false')
       }
     }
   },
@@ -618,7 +623,8 @@ AFRAME.registerComponent('clickable-object', {
 
   schema: {
     id: {type: 'selector'},
-    infopanel: {type: 'selector', default: '#info-panel'}
+    infopanel: {type: 'selector', default: '#info-panel'},
+    disabled: {type: 'boolean', default: 'false'}
   },
 
   init: function () {
@@ -629,6 +635,15 @@ AFRAME.registerComponent('clickable-object', {
       'click' : this.clickListener.bind(this)
     }
     this.el.addEventListener("click", this.listeners.click);
+  },
+
+  update: function () {
+    if (this.data.disabled) {
+      this.el.setAttribute('class','');
+    }
+    else {
+      this.el.setAttribute('class','clickable-object');
+    }
   },
 
   clickListener: function() {
