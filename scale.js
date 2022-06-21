@@ -72,7 +72,9 @@ AFRAME.registerComponent('scalable', {
   // Use this to compute whether or not to display the element.
   adjustChildrenVisibility: function () {
 
-    for (child of this.el.children) {
+    children = document.querySelectorAll('[clickable-object]')
+
+    for (child of children) {
 
       child.object3D.getWorldScale(this.checkScale)
 
